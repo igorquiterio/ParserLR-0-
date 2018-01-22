@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -15,17 +16,17 @@ public class Producao {
     private String naoTerminal;
     private LinkedList<String> cadeia;
     private int pontoCorrente;
+    private int indice;
     
-    public Producao (String gramatica){
-        String[] linhas = gramatica.split("\n");
-        for(int i=0; i<linhas.length; i++){
-            String linha = linhas[i].trim();
-            String nTerminal = linha.split("->")[0].trim();
-            String cadeia = linha.split("->")[1].trim();
-            System.out.println("Não terminal "+nTerminal);
-            System.out.println("Cadeia "+ cadeia);
-        }
+    public Producao(String pNaoTerminal, String pCadeia, int index){
+        this.naoTerminal = pNaoTerminal;
+        String[] termos = pCadeia.split(" ");
+        this.cadeia = new LinkedList();
+        this.cadeia.addAll(Arrays.asList(termos));
+        this.indice = index;
     }
+    
+    
     
     /**
      * @return the naoTerminal
@@ -67,6 +68,20 @@ public class Producao {
      */
     public void setPontoCorrente(int pontoCorrente) {
         this.pontoCorrente = pontoCorrente;
+    }
+
+    /**
+     * @return the indice
+     */
+    public int getIndice() {
+        return indice;
+    }
+
+    /**
+     * @param indice the indice to set
+     */
+    public void setIndice(int indice) {
+        this.indice = indice;
     }
     
     

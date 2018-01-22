@@ -6,14 +6,13 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Producao;
+import model.Gramatica;
 
 /**
  *
@@ -68,16 +67,7 @@ public class GramaticaController extends HttpServlet {
                 
                 String gramatica = request.getParameter("gramatica");
                 
-                Producao prod = new Producao(gramatica);
-                
-                String[] linhas = gramatica.split("\n");
-                for(int i=0; i<linhas.length; i++){
-                    String linha = linhas[i].trim();
-                    String nTerminal = linha.split("->")[0].trim();
-                    String cadeia = linha.split("->")[1].trim();
-                    System.out.println("Não terminal "+nTerminal);
-                    System.out.println("Cadeia "+ cadeia);
-                }
+                Gramatica prod = new Gramatica(gramatica);
                 
                 break;
         }
