@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Producao;
 
 /**
  *
@@ -64,6 +65,19 @@ public class GramaticaController extends HttpServlet {
            
             case "/gramatica":
                 System.out.println(request.getParameter("gramatica"));
+                
+                String gramatica = request.getParameter("gramatica");
+                
+                Producao prod = new Producao(gramatica);
+                
+                String[] linhas = gramatica.split("\n");
+                for(int i=0; i<linhas.length; i++){
+                    String linha = linhas[i].trim();
+                    String nTerminal = linha.split("->")[0].trim();
+                    String cadeia = linha.split("->")[1].trim();
+                    System.out.println("Não terminal "+nTerminal);
+                    System.out.println("Cadeia "+ cadeia);
+                }
                 
                 break;
         }
