@@ -1,2 +1,23 @@
-# ParserLR-0-
-Parser LR(0) para análise sintática para gramáticas livres de contexto
+
+ParserLR(0)
+======================
+Left-to-right parsing, Rightmost-derivation 0
+
+Projeto de um parser LR(0) em JavaEE ultilizando MVC para análises sintáticas
+
+- **Responsáveis** Gustavo Mariotto de Oliveira & Igor da Costa Quitério
+
+
+Versionamento
+=======================
+
+- **Apache Tomcat** 8.0.27.0
+- **Java EE Web** 7
+
+Bibliotecas utilizadas
+======================
+
+- [Bootstrap][1]
+
+[1]: http://getbootstrap.com/
+
