@@ -69,6 +69,8 @@ public class GramaticaController extends HttpServlet {
                 
                 Gramatica prod = new Gramatica(gramatica);
                 
+                prod.setEstados(prod.gerarPrimeiroEstado());
+                
                 break;
         }
         

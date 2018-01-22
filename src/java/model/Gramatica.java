@@ -14,6 +14,7 @@ import java.util.LinkedList;
 public class Gramatica {
     
     private LinkedList<Producao> producoes;
+    private LinkedList<Estado> estados;
     
     public Gramatica (String gramatica){
         String[] linhas = gramatica.split("\n");
@@ -34,6 +35,21 @@ public class Gramatica {
             }
             System.out.println("");
         }
+        this.estados = new LinkedList();
+    }
+    
+    public LinkedList<Estado> gerarPrimeiroEstado(){
+        Producao primeira = this.producoes.get(0);
+        Estado est = new Estado(primeira, 0);
+        Producao copia = new Producao(primeira.getNaoTerminal(), primeira.getCadeia(), primeira.getIndice());
+        copia.setPontoCorrente(0);
+        if(!copia.getCadeia().isEmpty()){
+            String next = copia.getCadeia().get(0);
+            // verificar se o termo é não terminal para adicionar produções
+            // fazer também tratamento de produção já tiver sido adicionada no estado com o ponto corrente certo
+        }
+        
+        return null;
     }
     
     /**
@@ -48,6 +64,20 @@ public class Gramatica {
      */
     public void setProducoes(LinkedList<Producao> producoes) {
         this.producoes = producoes;
+    }
+
+    /**
+     * @return the estados
+     */
+    public LinkedList<Estado> getEstados() {
+        return estados;
+    }
+
+    /**
+     * @param estados the estados to set
+     */
+    public void setEstados(LinkedList<Estado> estados) {
+        this.estados = estados;
     }
     
     

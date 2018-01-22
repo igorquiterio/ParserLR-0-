@@ -26,6 +26,12 @@ public class Producao {
         this.indice = index;
     }
     
+    public Producao(String pNaoTerminal, LinkedList<String> pCadeia, int index){
+        this.naoTerminal = pNaoTerminal;
+        this.cadeia = pCadeia;
+        this.indice = index;
+    }
+    
     
     
     /**
