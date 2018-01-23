@@ -63,12 +63,9 @@ public class GramaticaController extends HttpServlet {
         switch (request.getServletPath()) {
            
             case "/gramatica":
-                System.out.println(request.getParameter("gramatica"));
                 
                 String gramatica = request.getParameter("gramatica");
-                
                 Gramatica prod = new Gramatica(gramatica);
-                
                 prod.setEstados(prod.gerarPrimeiroEstado());
                 
                 break;

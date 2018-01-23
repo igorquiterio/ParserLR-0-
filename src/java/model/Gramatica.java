@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -15,10 +17,12 @@ public class Gramatica {
     
     private LinkedList<Producao> producoes;
     private LinkedList<Estado> estados;
+    private HashSet<String> naoTerminais;
     
     public Gramatica (String gramatica){
-        String[] linhas = gramatica.split("\n");
+        String[] linhas = gramatica.split("\n",-1);
         
+        this.naoTerminais = new HashSet();
         this.producoes = new LinkedList();
         
         for (int i = 0; i < linhas.length; i++) {
@@ -30,13 +34,17 @@ public class Gramatica {
         }
         for(Producao prod : this.producoes){
             System.out.print(prod.getNaoTerminal() + " -> ");
+            preencheNaoTerminais(prod.getNaoTerminal());
             for(String termo : prod.getCadeia()){
                 System.out.print(termo + " ");
             }
             System.out.println("");
         }
         this.estados = new LinkedList();
+
+        PrintaNaoTerminais();
     }
+
     
     public LinkedList<Estado> gerarPrimeiroEstado(){
         Producao primeira = this.producoes.get(0);
@@ -52,6 +60,30 @@ public class Gramatica {
         return null;
     }
     
+    private void preencheNaoTerminais(String nomTerm){
+        if(!this.naoTerminais.contains(nomTerm)){
+            this.naoTerminais.add(nomTerm);
+        }
+    }
+    
+    //funcao usada somente para teste, remover na versao final
+    public void PrintaNaoTerminais(){
+        System.out.print("não terminais: ");
+        Iterator<String> iterator = this.naoTerminais.iterator();
+	while (iterator.hasNext()) {
+		System.out.print(iterator.next() + " ");
+        }
+        System.out.println("");
+    }
+
+    public HashSet<String> getNaoTerminais() {
+        return naoTerminais;
+    }
+
+    public void setNaoTerminais(HashSet<String> naoTerminais) {
+        this.naoTerminais = naoTerminais;
+    }
+
     /**
      * @return the producoes
      */

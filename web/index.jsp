@@ -15,15 +15,20 @@
     <body>
         
         <div class="container">
-            <h2 class="form-signin-heading">Gustavo tongo</h2>
-            <form class="form-signin" action="${pageContext.servletContext.contextPath}/gramatica" method="POST">
+            <h2 class="form-signin-heading">Parser LR0</h2>
+            <form class="form-group" action="${pageContext.servletContext.contextPath}/gramatica" method="POST">
                 <td>
-                    <textarea class="form-control" rows="15" cols="60" name="gramatica" placeholder="Gramatica" ></textarea>
+                    <textarea class="form-control" rows="10" cols="30" name="gramatica" placeholder=" S -> A b &#x0a A -> c &#x0a A -> d" ></textarea>
                 </td>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Submeter</button>
+                <br>
+                <br>
+                <div class="text-center">
+                    <button class="btn btn-lg btn-primary" type="submit">Submeter</button>
+                </div>
             </form>
         </div>
         <script src="${pageContext.servletContext.contextPath}/assets/vendor/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.servletContext.contextPath}/assets/vendor/js/bootstrap.min.js"></script>
+        <script src="${pageContext.servletContext.contextPath}/assets/vendor/js/multiline-placeholder.js"></script>
     </body>
 </html>
