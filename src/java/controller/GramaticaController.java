@@ -12,13 +12,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Gramatica;
 
 /**
  *
  * @author quiterio
  */
-@WebServlet(name = "gramatica", urlPatterns = {"/gramatica", "/gramatica/read"})
+@WebServlet(name = "gramatica", urlPatterns = {"/gramatica", "/gramatica/estados"})
 public class GramaticaController extends HttpServlet {
 
     /**
@@ -45,6 +46,20 @@ public class GramaticaController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        Gramatica gramatica;
+        HttpSession session = request.getSession();
+        RequestDispatcher dispatcher;
+        switch (request.getServletPath()) {
+           
+            case "/gramatica/estados":
+                
+//                gramatica = (Gramatica) session.getAttribute("gram");
+                
+                dispatcher = request.getRequestDispatcher("/view/gramatica/tabelaEstados.jsp");
+                dispatcher.forward(request, response);
+                
+                break;
+        }
     }
 
     /**
@@ -59,15 +74,20 @@ public class GramaticaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        Gramatica gramatica;
+        HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
+        
         switch (request.getServletPath()) {
            
             case "/gramatica":
                 
-                String gramatica = request.getParameter("gramatica");
-                Gramatica prod = new Gramatica(gramatica);
-                prod.setEstados(prod.gerarPrimeiroEstado());
+                String txtInput = request.getParameter("gramatica");
+                gramatica = new Gramatica(txtInput);
+                gramatica.setEstados(gramatica.gerarPrimeiroEstado());
                 
+                session.setAttribute("gram", gramatica);
+                response.sendRedirect(request.getContextPath() + "/gramatica/estados");
                 break;
         }
         

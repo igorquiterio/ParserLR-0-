@@ -31,7 +31,7 @@ public class Gramatica {
                 String nTerminal = linha.split("->")[0].trim();
                 String cadeia = linha.split("->")[1].trim();
                 Producao prod = new Producao(nTerminal, cadeia, i);
-                this.producoes.add(prod);
+                this.producoes.add(prod);   
             }
         }
         for(Producao prod : this.producoes){
