@@ -26,11 +26,13 @@ public class Gramatica {
         this.producoes = new LinkedList();
         
         for (int i = 0; i < linhas.length; i++) {
-            String linha = linhas[i].trim();
-            String nTerminal = linha.split("->")[0].trim();
-            String cadeia = linha.split("->")[1].trim();
-            Producao prod = new Producao(nTerminal, cadeia, i);
-            this.producoes.add(prod);
+            if(linhas[i].compareTo("") != 1){
+                String linha = linhas[i].trim();
+                String nTerminal = linha.split("->")[0].trim();
+                String cadeia = linha.split("->")[1].trim();
+                Producao prod = new Producao(nTerminal, cadeia, i);
+                this.producoes.add(prod);   
+            }
         }
         for(Producao prod : this.producoes){
             System.out.print(prod.getNaoTerminal() + " -> ");
