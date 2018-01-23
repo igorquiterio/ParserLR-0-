@@ -26,7 +26,7 @@ public class Estado {
     }
     
     public int verificarProducaoEstado(Producao teste){
-        for(Producao prod : producao){
+        for(Producao prod : this.producao){
             // produção com o mesmo não terminal
             if(prod.getNaoTerminal().compareTo(teste.getNaoTerminal()) == 1){
                 // pontos correntes diferentes

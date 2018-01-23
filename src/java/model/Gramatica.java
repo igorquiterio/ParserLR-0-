@@ -68,13 +68,13 @@ public class Gramatica {
                 // encontrei uma produção daquele não terminal
                 if(prod.getNaoTerminal().compareTo(proximo) == 1){
                     // verifica se já foi adicionado ao estado
-                    if(est.verificarProducaoEstado()){
-                        
+                    if(est.verificarProducaoEstado(prod) == 0){
+                        copia = new Producao(prod.getNaoTerminal(), prod.getCadeia(), prod.getIndice());
                     }
                 }
             }
         }
-            
+        // preciso repensar nos métodos a fazer e na ordem de execução deles..
         // verificar se o termo é não terminal para adicionar produções
         // fazer também tratamento de produção já tiver sido adicionada no estado com o ponto corrente certo
         
