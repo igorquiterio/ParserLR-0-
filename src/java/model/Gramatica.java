@@ -26,11 +26,13 @@ public class Gramatica {
         this.producoes = new LinkedList();
         
         for (int i = 0; i < linhas.length; i++) {
-            String linha = linhas[i].trim();
-            String nTerminal = linha.split("->")[0].trim();
-            String cadeia = linha.split("->")[1].trim();
-            Producao prod = new Producao(nTerminal, cadeia, i);
-            this.producoes.add(prod);
+            if(linhas[i].compareTo("") != 1){
+                String linha = linhas[i].trim();
+                String nTerminal = linha.split("->")[0].trim();
+                String cadeia = linha.split("->")[1].trim();
+                Producao prod = new Producao(nTerminal, cadeia, i);
+                this.producoes.add(prod);
+            }
         }
         for(Producao prod : this.producoes){
             System.out.print(prod.getNaoTerminal() + " -> ");
@@ -47,15 +49,34 @@ public class Gramatica {
 
     
     public LinkedList<Estado> gerarPrimeiroEstado(){
+        // pegando primeira produção
         Producao primeira = this.producoes.get(0);
+        // criando novo estado
         Estado est = new Estado(primeira, 0);
+        // fazendo cópia da produção para adicionar ao estado
         Producao copia = new Producao(primeira.getNaoTerminal(), primeira.getCadeia(), primeira.getIndice());
         copia.setPontoCorrente(0);
-        if(!copia.getCadeia().isEmpty()){
-            String next = copia.getCadeia().get(0);
-            // verificar se o termo é não terminal para adicionar produções
-            // fazer também tratamento de produção já tiver sido adicionada no estado com o ponto corrente certo
+        // adicionando produção à lista de produções do estado
+        est.getProducao().add(copia);
+        // pegando proximo simbolo para mais produções ou não
+        String proximo = copia.getCadeia().get(0);
+        // se símbolo for um não terminal
+        if(this.naoTerminais.contains(proximo)){
+            // procura produções daquele não terminal
+            for(int i=0; i<producoes.size(); i++){
+                Producao prod = producoes.get(i);
+                // encontrei uma produção daquele não terminal
+                if(prod.getNaoTerminal().compareTo(proximo) == 1){
+                    // verifica se já foi adicionado ao estado
+                    if(est.verificarProducaoEstado()){
+                        
+                    }
+                }
+            }
         }
+            
+        // verificar se o termo é não terminal para adicionar produções
+        // fazer também tratamento de produção já tiver sido adicionada no estado com o ponto corrente certo
         
         return null;
     }

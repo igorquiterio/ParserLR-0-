@@ -24,6 +24,27 @@ public class Estado {
         this.mudancas = new LinkedList();
         this.producao = new LinkedList();
     }
+    
+    public int verificarProducaoEstado(Producao teste){
+        for(Producao prod : producao){
+            // produção com o mesmo não terminal
+            if(prod.getNaoTerminal().compareTo(teste.getNaoTerminal()) == 1){
+                // pontos correntes diferentes
+                if(teste.getPontoCorrente() == prod.getPontoCorrente()){
+                    // cadeias de tamanhos diferentes
+                    if (prod.getCadeia().size() == teste.getCadeia().size()) {
+                        for(int i=0;i<prod.getCadeia().size(); i++){
+                            if(prod.getCadeia().get(i).compareTo(teste.getCadeia().get(i)) != 1){
+                                return 0;
+                            }
+                        }
+                        return 1;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 
     /**
      * @return the chave
