@@ -30,9 +30,36 @@ public class Producao {
         this.naoTerminal = pNaoTerminal;
         this.cadeia = pCadeia;
         this.indice = index;
+        this.pontoCorrente = -1;
     }
     
+    public Producao copiarProducao(){
+        Producao prod = new Producao(this.naoTerminal, this.cadeia, this.indice);
+        prod.setPontoCorrente(this.pontoCorrente);
+        return prod;
+    }
     
+    public boolean compararProducao(Producao prod){
+        if(prod.getIndice() == this.indice){
+            if(prod.getPontoCorrente() == this.pontoCorrente){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void mostrarProducao(){
+        System.out.print(this.naoTerminal + " ->");
+        int i = 0;
+        for(String termo : this.cadeia){
+            if(i == this.pontoCorrente){
+                System.out.print(" .");
+            }
+            i++;
+            System.out.print(" " + termo);
+        }
+        System.out.println();
+    }
     
     /**
      * @return the naoTerminal

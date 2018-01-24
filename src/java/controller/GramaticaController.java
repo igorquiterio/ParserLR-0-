@@ -84,7 +84,8 @@ public class GramaticaController extends HttpServlet {
                 
                 String txtInput = request.getParameter("gramatica");
                 gramatica = new Gramatica(txtInput);
-                gramatica.setEstados(gramatica.gerarPrimeiroEstado());
+                gramatica.gerarEstado(gramatica.getProducoes().getFirst(), 0);
+                gramatica.mostrarEstados();
                 
                 session.setAttribute("gram", gramatica);
                 response.sendRedirect(request.getContextPath() + "/gramatica/estados");
