@@ -57,7 +57,7 @@ public class Producao {
     public void mostrarProducao(){
         System.out.print(this.naoTerminal + " ->");
         int i = 0;
-        if(this.cadeia.isEmpty()){
+        if(this.cadeia.isEmpty() && this.pontoCorrente != -1){
             System.out.println(" .");
         }
         else{

@@ -18,14 +18,12 @@ public class Gramatica {
     private LinkedList<Producao> producoes;
     private LinkedList<Estado> estados;
     private HashSet<String> naoTerminais;
-    private int ultimoIndiceEstado;
     
     public Gramatica (String gramatica){
         String[] linhas = gramatica.split("\n",-1);
         
         this.naoTerminais = new HashSet();
         this.producoes = new LinkedList();
-        this.ultimoIndiceEstado = -1;
         
         for (int i = 0; i < linhas.length; i++) {
             if(linhas[i].compareTo("") != 1){
@@ -41,12 +39,8 @@ public class Gramatica {
             }
         }
         for(Producao prod : this.producoes){
-            System.out.print(prod.getNaoTerminal() + " -> ");
-            preencheNaoTerminais(prod.getNaoTerminal());
-            for(String termo : prod.getCadeia()){
-                System.out.print(termo + " ");
-            }
-            System.out.println("");
+            prod.mostrarProducao();
+            this.preencheNaoTerminais(prod.getNaoTerminal());
         }
         this.estados = new LinkedList();
 
@@ -55,7 +49,7 @@ public class Gramatica {
     
     
     @SuppressWarnings("empty-statement")
-    public void gerarEstado(Producao prod, int indice){
+    public int gerarEstado(Producao prod, int indice){
         String naoTerminalCorrente = prod.getNaoTerminal();
         Producao copia = prod.copiarProducao();
 
@@ -79,11 +73,27 @@ public class Gramatica {
             while(this.adicionarProducaoEstado(est) == 1);
             est.mostrarEstado();
             this.getEstados().add(est);
-            this.ultimoIndiceEstado = indice;
+            return 1;
         }
         else{
-            Estado est = this.estados.get(this.ultimoIndiceEstado);
-            
+            int procuraEstado = 0;
+            for(Estado est : this.estados){
+                for(Producao chaves : est.getChave()){
+                    if(chaves.compararProducao(prod)){
+                        procuraEstado = 1;
+                    }
+                }
+            }
+            if(procuraEstado == 1){
+                System.out.println("Já existe um estado com essa chave");
+                return 0;
+            }
+            else{
+                System.out.println("Não existe um estado com essa chave, adicionar novo estado");
+                Estado novoEstado = new Estado();
+                
+                return 1;
+            }
         }
     }
     
@@ -102,7 +112,6 @@ public class Gramatica {
                                 Producao copia = nTerminalProd.copiarProducao();
                                 copia.setPontoCorrente(0);
                                 listaAdicionar.add(copia);
-                                copia.mostrarProducao();
                                 o = 1;
                             }
                         }
@@ -114,46 +123,6 @@ public class Gramatica {
             est.getProducao().add(prod);
         });
         return o;
-    }
-
-    
-    public LinkedList<Estado> gerarPrimeiroEstado(){
-        // pegando primeira produção
-        Producao primeira = this.getProducoes().get(0);
-        String naoTerminalCorrente = primeira.getNaoTerminal();
-        // criando novo estado
-        Estado est = new Estado();
-        // procurando mais produções desse não terminal
-        for(Producao prod : this.getProducoes()){
-            if(prod.getNaoTerminal().compareTo(naoTerminalCorrente) == 1){
-                 // fazendo cópia da produção para adicionar ao estado
-                Producao copia = new Producao(primeira.getNaoTerminal(), primeira.getCadeia(), primeira.getIndice());
-                copia.setPontoCorrente(0);
-                // adicionando produção à lista de produções do estado
-                est.getProducao().add(copia);
-            }
-        }
-        // pegando proximo simbolo para mais produções ou não
-//        String proximo = copia.getCadeia().get(0);
-//        // se símbolo for um não terminal
-//        if(this.naoTerminais.contains(proximo)){
-//            // procura produções daquele não terminal
-//            for(int i=0; i<producoes.size(); i++){
-//                Producao prod = producoes.get(i);
-//                // encontrei uma produção daquele não terminal
-//                if(prod.getNaoTerminal().compareTo(proximo) == 1){
-//                    // verifica se já foi adicionado ao estado
-//                    if(est.verificarProducaoEstado(prod) == 0){
-//                        copia = new Producao(prod.getNaoTerminal(), prod.getCadeia(), prod.getIndice());
-//                    }
-//                }
-//            }
-//        }
-        // preciso repensar nos métodos a fazer e na ordem de execução deles..
-        // verificar se o termo é não terminal para adicionar produções
-        // fazer também tratamento de produção já tiver sido adicionada no estado com o ponto corrente certo
-        
-        return null;
     }
     
     public void mostrarEstados(){
@@ -213,21 +182,5 @@ public class Gramatica {
     public void setEstados(LinkedList<Estado> estados) {
         this.estados = estados;
     }
-
-    /**
-     * @return the ultimoIndiceEstado
-     */
-    public int getUltimoIndiceEstado() {
-        return ultimoIndiceEstado;
-    }
-
-    /**
-     * @param ultimoIndiceEstado the ultimoIndiceEstado to set
-     */
-    public void setUltimoIndiceEstado(int ultimoIndiceEstado) {
-        this.ultimoIndiceEstado = ultimoIndiceEstado;
-    }
-    
-    
     
 }
