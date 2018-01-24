@@ -20,10 +20,13 @@ public class Producao {
     
     public Producao(String pNaoTerminal, String pCadeia, int index){
         this.naoTerminal = pNaoTerminal;
-        String[] termos = pCadeia.split(" ");
         this.cadeia = new LinkedList();
-        this.cadeia.addAll(Arrays.asList(termos));
+        if(pCadeia.length() > 0){
+            String[] termos = pCadeia.split(" ");
+            this.cadeia.addAll(Arrays.asList(termos));
+        }
         this.indice = index;
+        this.pontoCorrente = -1;
     }
     
     public Producao(String pNaoTerminal, LinkedList<String> pCadeia, int index){
@@ -44,6 +47,9 @@ public class Producao {
             if(prod.getPontoCorrente() == this.pontoCorrente){
                 return true;
             }
+            else if(prod.getPontoCorrente() == -1 || this.pontoCorrente == -1){
+                return true;
+            }
         }
         return false;
     }
@@ -51,14 +57,19 @@ public class Producao {
     public void mostrarProducao(){
         System.out.print(this.naoTerminal + " ->");
         int i = 0;
-        for(String termo : this.cadeia){
-            if(i == this.pontoCorrente){
-                System.out.print(" .");
-            }
-            i++;
-            System.out.print(" " + termo);
+        if(this.cadeia.isEmpty()){
+            System.out.println(" .");
         }
-        System.out.println();
+        else{
+            for(String termo : this.cadeia){
+                if(i == this.pontoCorrente){
+                    System.out.print(" .");
+                }
+                i++;
+                System.out.print(" " + termo);
+            }
+            System.out.println();
+        }
     }
     
     /**
