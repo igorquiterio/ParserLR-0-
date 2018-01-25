@@ -12,10 +12,12 @@ package model;
 public class Mudanca {
     private int estadoDestino;
     private String termo;
+    private String naoTerminal;
     
-    public Mudanca (int pEstadoDestino, String pTermo){
+    public Mudanca (int pEstadoDestino, String pTermo, String pNaoTerminal){
         this.estadoDestino = pEstadoDestino;
         this.termo = pTermo;
+        this.naoTerminal = pNaoTerminal;
     }
 
     /**
@@ -44,6 +46,20 @@ public class Mudanca {
      */
     public void setTermo(String termo) {
         this.termo = termo;
+    }
+
+    /**
+     * @return the naoTerminal
+     */
+    public String getNaoTerminal() {
+        return naoTerminal;
+    }
+
+    /**
+     * @param naoTerminal the naoTerminal to set
+     */
+    public void setNaoTerminal(String naoTerminal) {
+        this.naoTerminal = naoTerminal;
     }
     
     

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Estado;
 import model.Gramatica;
 
 /**
@@ -86,10 +87,18 @@ public class GramaticaController extends HttpServlet {
                 int gerador = 0;
                 String txtInput = request.getParameter("gramatica");
                 gramatica = new Gramatica(txtInput);
-                gerador = gramatica.gerarEstado(gramatica.getProducoes().getFirst(), 0);
+                gramatica.gerarPrimeiroEstado(gramatica.getProducoes().getFirst());
                 gramatica.mostrarEstados();
-                
-                
+//                gerador = gramatica.avancarPontoCorrente();
+                while(gerador == 1){
+                    for(Estado est : gramatica.getEstados()){
+                        gerador = gramatica.gerarEstado(est);
+                        if(gerador == 1){
+                            break;
+                        }
+                    }
+                }
+                gramatica.mostrarEstados();
                 
                 session.setAttribute("gram", gramatica);
                 response.sendRedirect(request.getContextPath() + "/gramatica/estados");

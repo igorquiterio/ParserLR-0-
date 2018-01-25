@@ -68,6 +68,9 @@ public class Producao {
                 i++;
                 System.out.print(" " + termo);
             }
+            if(i == this.pontoCorrente){
+                System.out.print(" .");
+            }
             System.out.println();
         }
     }

@@ -17,16 +17,23 @@ public class Estado {
     private LinkedList<Producao> chave;
     private LinkedList<Producao> producao;
     private LinkedList<Mudanca> mudancas;
+    private LinkedList<Integer> reduce;
+    private LinkedList<Integer> goTo;
+    private LinkedList<Integer> shift;
+    
     
     public Estado(){
         this.chave = new LinkedList();
         this.producao = new LinkedList();
         this.mudancas = new LinkedList();
         this.indice = -1;
+        this.reduce = new LinkedList();
+        this.goTo = new LinkedList();
+        this.shift = new LinkedList();
     }
     
     public int verificarProducaoEstado(Producao teste){
-        for(Producao prod : this.producao){
+        for(Producao prod : this.getProducao()){
             if(prod.compararProducao(teste)){
                 return 1;
             }
@@ -34,14 +41,26 @@ public class Estado {
         return 0;
     }
     
+    public void adicionarReduce(int indiceProducao){
+        this.getReduce().add(indiceProducao);
+    }
+    
+    public void adicionarGoTo(int indiceProducao){
+        this.getGoTo().add(indiceProducao);
+    }
+    
+    public void adicionarShift(int indiceProducao){
+        this.getShift().add(indiceProducao);
+    }
+    
     public void mostrarEstado(){
-        System.out.println("Estado: " + this.indice);
+        System.out.println("Estado: " + this.getIndice());
         System.out.println("Chaves:");
-        for(Producao prod : this.chave){
+        for(Producao prod : this.getChave()){
             prod.mostrarProducao();
         }
         System.out.println("Produções");
-        for(Producao prod : this.producao){
+        for(Producao prod : this.getProducao()){
             prod.mostrarProducao();
         }
     }
@@ -100,6 +119,48 @@ public class Estado {
      */
     public void setIndice(int indice) {
         this.indice = indice;
+    }
+
+    /**
+     * @return the reduce
+     */
+    public LinkedList<Integer> getReduce() {
+        return reduce;
+    }
+
+    /**
+     * @param reduce the reduce to set
+     */
+    public void setReduce(LinkedList<Integer> reduce) {
+        this.reduce = reduce;
+    }
+
+    /**
+     * @return the goTo
+     */
+    public LinkedList<Integer> getGoTo() {
+        return goTo;
+    }
+
+    /**
+     * @param goTo the goTo to set
+     */
+    public void setGoTo(LinkedList<Integer> goTo) {
+        this.goTo = goTo;
+    }
+
+    /**
+     * @return the shift
+     */
+    public LinkedList<Integer> getShift() {
+        return shift;
+    }
+
+    /**
+     * @param shift the shift to set
+     */
+    public void setShift(LinkedList<Integer> shift) {
+        this.shift = shift;
     }
     
     
