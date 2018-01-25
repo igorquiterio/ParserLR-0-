@@ -19,6 +19,21 @@ public class Mudanca {
         this.termo = pTermo;
         this.naoTerminal = pNaoTerminal;
     }
+    
+    public boolean compararMudancas(Mudanca mud){
+        if(mud.getEstadoDestino() == this.estadoDestino){
+            if(mud.getNaoTerminal().compareTo(this.naoTerminal) == 0){
+                if(mud.getTermo().compareTo(this.termo) == 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public void mostrarMudanca(){
+        System.out.println(this.naoTerminal + " " + this.termo + " " + this.estadoDestino);
+    }
 
     /**
      * @return the estadoDestino

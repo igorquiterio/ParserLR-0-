@@ -6,6 +6,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -83,23 +84,31 @@ public class GramaticaController extends HttpServlet {
         switch (request.getServletPath()) {
            
             case "/gramatica":
-                
-                int gerador = 0;
                 String txtInput = request.getParameter("gramatica");
                 gramatica = new Gramatica(txtInput);
                 gramatica.gerarPrimeiroEstado(gramatica.getProducoes().getFirst());
-                gramatica.mostrarEstados();
-//                gerador = gramatica.avancarPontoCorrente();
+                
+                LinkedList<Estado> novosEstados = new LinkedList();
+                int gerador = 1;
+                int i;
+                
                 while(gerador == 1){
-                    for(Estado est : gramatica.getEstados()){
-                        gerador = gramatica.gerarEstado(est);
-                        if(gerador == 1){
+                    for(i=0;i<gramatica.getEstados().size(); i++){
+                        novosEstados = gramatica.gerarEstado(gramatica.getEstados().get(i));
+                        if(!novosEstados.isEmpty())
                             break;
+                    }
+                    if(!novosEstados.isEmpty()){
+                        for(Estado est : novosEstados){
+                            gramatica.getEstados().add(est);
                         }
                     }
+                    else
+                        gerador = 0;
                 }
-                gramatica.mostrarEstados();
                 
+                
+                gramatica.mostrarEstados();
                 session.setAttribute("gram", gramatica);
                 response.sendRedirect(request.getContextPath() + "/gramatica/estados");
                 break;

@@ -69,113 +69,114 @@ public class Gramatica {
             }
         }
         while(this.adicionarProducaoEstado(est) == 1);
-        est.mostrarEstado();
+        //est.mostrarEstado();
         this.getEstados().add(est);
     }
     
     @SuppressWarnings("empty-statement")
-    public int gerarEstado(Estado est){
+    public LinkedList<Estado> gerarEstado(Estado est){
+        LinkedList<Estado> novosEstados = new LinkedList();
+        LinkedList<Mudanca> novasMudancas = new LinkedList();
+
         for(Producao prod : est.getProducao()){
-            if(!this.verificarEstadoExistente(prod)){
-                int indice = criarEstado(prod);
-                String termo = prod.getCadeia().get(prod.getPontoCorrente());
-                if(this.naoTerminais.contains(termo))
-                    est.adicionarGoTo(indice);
-                else
-                    est.adicionarShift(prod.getIndice());
-                Mudanca mud = new Mudanca(indice, termo, prod.getNaoTerminal());
-                est.getMudancas().add(mud);
-                return 1;
+            Producao copia = prod.copiarProducao();
+            copia.setPontoCorrente(prod.getPontoCorrente()+1);
+            // Caso a produção não tenha mais nada para ler
+            if(prod.getCadeia().size() == prod.getPontoCorrente()){
+                est.adicionarReduce(prod.getIndice());
             }
             else{
-                if(prod.getCadeia().size() <= prod.getPontoCorrente()){
-                    est.adicionarReduce(prod.getIndice());
-                    return 0;
-                }
-                else{
-                    int estadoExistente = resgatarEstadoMesmaTransica(prod);
-                    if(estadoExistente == -1){
-                        System.out.println("Erro ao encontrar estado");
-                    }
-                    else{
-                        System.out.println("Estado encontrado "+ estadoExistente);
-                        Estado inserir = this.estados.get(estadoExistente);
-                        Producao copia = prod.copiarProducao();
-                        copia.setPontoCorrente(copia.getPontoCorrente()+1);
-                        inserir.getChave().add(copia);
-                        inserir.getProducao().add(copia);
-                        while(this.adicionarProducaoEstado(inserir) == 1);
-                        return 0;
-                    }
-                }
-            }
-        }
-        
-        return 0;
-    }
-    
-    public int resgatarEstadoMesmaTransica(Producao prod){
-        for(Estado est : this.estados){
-            for(Mudanca mud : est.getMudancas()){
-                if(!prod.getCadeia().isEmpty()){
-                    if(mud.getTermo().compareTo(prod.getCadeia().get(prod.getPontoCorrente())) == 0){
-                        return mud.getEstadoDestino();
-                    }
-                }
-            }
-        }
-        return -1;
-    }
-    
-    public boolean verificarEstadoExistente(Producao prod){
-        System.out.println("Producao a ser verificada:");
-        prod.mostrarProducao();
-        if(prod.getCadeia().size() <= prod.getPontoCorrente())
-            return true;
-        else{
-            for(Estado est : this.estados){
-                for(Mudanca mud : est.getMudancas()){
-                    if(!prod.getCadeia().isEmpty()){
-                        if(mud.getTermo().compareTo(prod.getCadeia().get(prod.getPontoCorrente())) == 0){
-                            return true;
+                String termo = prod.getCadeia().get(prod.getPontoCorrente());
+                Mudanca mud = null;
+                int existeMudanca = 0;
+                // procurando no estado alguma mudanca com o mesmo termo
+                for(Mudanca teste : est.getMudancas()){
+                    if(teste.getTermo().compareTo(termo) == 0){
+                        mud = teste;
+                        existeMudanca = 1;
+                        // mudanca futura já existente
+                        if(teste.getNaoTerminal().compareTo(prod.getNaoTerminal()) == 0){
+                            mud = null;
+                            existeMudanca = 2;
+                            break;
                         }
                     }
-                    else
-                        return true;
+                }
+                // criar nova mudanca
+                if(existeMudanca == 0){
+                    // verificar se algum estado tem essa produção como chave
+                    int encontrouEstadoChave = 0;
+                    for(int i=0;i<this.estados.size(); i++){
+                        Estado teste = this.estados.get(i);
+                        for(Producao chave : teste.getChave()){
+                            if(chave.compararProducao(copia)){
+                                encontrouEstadoChave = 1;
+                                mud = new Mudanca(teste.getIndice(), termo, copia.getNaoTerminal());
+                                novasMudancas.add(mud);
+                                break;
+                            }
+                        }
+                    }
+                    if(encontrouEstadoChave == 0){
+                        Estado estadoNovo = criarEstado(copia);
+                        novosEstados.add(estadoNovo);
+                        mud = new Mudanca(estadoNovo.getIndice(), termo, copia.getNaoTerminal());
+                        est.getMudancas().add(mud);
+                        while(this.adicionarProducaoEstado(estadoNovo) == 1);
+                    }
+                }
+                // fazer com que essa mudanca vá para o mesmo estado
+                else if(existeMudanca == 1){
+                    int estadoSuspeito = mud.getEstadoDestino();
+                    Estado teste = this.estados.get(estadoSuspeito);
+                    mud = new Mudanca(estadoSuspeito, termo, copia.getNaoTerminal());
+                    est.getMudancas().add(mud);
+                    teste.getChave().add(copia);
+                    teste.getProducao().add(copia);
+                    while(this.adicionarProducaoEstado(teste) == 1);
                 }
             }
         }
-        return false;
+        if(!novasMudancas.isEmpty()){
+            for(Mudanca mud : novasMudancas){
+                int criar = 1;
+                for(Mudanca teste : est.getMudancas()){
+                    if(teste.compararMudancas(mud)){
+                        criar = 0;
+                        break;
+                    }
+                }
+                if(criar == 1){
+                    est.getMudancas().add(mud);
+                }
+            }
+        }
+        return novosEstados;
     }
     
-    private int criarEstado(Producao prod){
-        System.out.println("Criando o estado");
-        prod.mostrarProducao();
-        Producao copia = prod.copiarProducao();
-        copia.setPontoCorrente(copia.getPontoCorrente()+1);
+    private Estado criarEstado(Producao prod){
         Estado est = new Estado();
-        est.getChave().add(copia);
-        est.getProducao().add(copia);
-        int ultimoIndice = this.estados.getLast().getIndice() + 1;
+        est.getChave().add(prod);
+        est.getProducao().add(prod);
+        int ultimoIndice = this.getEstados().getLast().getIndice() + 1;
         est.setIndice(ultimoIndice);
         this.estados.add(est);
-        return ultimoIndice;
+        return est;
     }
     
     private int adicionarProducaoEstado(Estado est){
         int o = 0;
         LinkedList<Producao> listaAdicionar = new LinkedList();
         String termo;
-        
         for(Producao prod : est.getProducao()){
             if(prod.getCadeia().size() > prod.getPontoCorrente()){
                 termo = prod.getCadeia().get(prod.getPontoCorrente());
                 if(this.getNaoTerminais().contains(termo)){
                     for(Producao nTerminalProd : this.getProducoes()){
                         if(nTerminalProd.getNaoTerminal().compareTo(termo) == 0){
-                            if(est.verificarProducaoEstado(nTerminalProd) == 0){
-                                Producao copia = nTerminalProd.copiarProducao();
-                                copia.setPontoCorrente(0);
+                            Producao copia = nTerminalProd.copiarProducao();
+                            copia.setPontoCorrente(0);
+                            if(est.verificarProducaoEstado(copia) == 0){
                                 listaAdicionar.add(copia);
                                 o = 1;
                             }
@@ -191,7 +192,7 @@ public class Gramatica {
     }
     
     public void mostrarEstados(){
-        for(Estado est : this.getEstados()){
+        for(Estado est : this.estados){
             est.mostrarEstado();
         }
     }

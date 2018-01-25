@@ -12,15 +12,12 @@ import java.util.LinkedList;
  * @author gustavo
  */
 public class Estado {
-    
+   
     private int indice;
     private LinkedList<Producao> chave;
     private LinkedList<Producao> producao;
     private LinkedList<Mudanca> mudancas;
     private LinkedList<Integer> reduce;
-    private LinkedList<Integer> goTo;
-    private LinkedList<Integer> shift;
-    
     
     public Estado(){
         this.chave = new LinkedList();
@@ -28,10 +25,12 @@ public class Estado {
         this.mudancas = new LinkedList();
         this.indice = -1;
         this.reduce = new LinkedList();
-        this.goTo = new LinkedList();
-        this.shift = new LinkedList();
     }
     
+    /*
+    A ideia é comparar as produções do estado com a teste
+    Caso haja alguma produção igual ao do teste retorna 1
+    */
     public int verificarProducaoEstado(Producao teste){
         for(Producao prod : this.getProducao()){
             if(prod.compararProducao(teste)){
@@ -45,14 +44,6 @@ public class Estado {
         this.getReduce().add(indiceProducao);
     }
     
-    public void adicionarGoTo(int indiceProducao){
-        this.getGoTo().add(indiceProducao);
-    }
-    
-    public void adicionarShift(int indiceProducao){
-        this.getShift().add(indiceProducao);
-    }
-    
     public void mostrarEstado(){
         System.out.println("Estado: " + this.getIndice());
         System.out.println("Chaves:");
@@ -62,6 +53,10 @@ public class Estado {
         System.out.println("Produções");
         for(Producao prod : this.getProducao()){
             prod.mostrarProducao();
+        }
+        System.out.println("Mudanças:");
+        for(Mudanca mud : this.mudancas){
+            mud.mostrarMudanca();
         }
     }
 
@@ -134,35 +129,5 @@ public class Estado {
     public void setReduce(LinkedList<Integer> reduce) {
         this.reduce = reduce;
     }
-
-    /**
-     * @return the goTo
-     */
-    public LinkedList<Integer> getGoTo() {
-        return goTo;
-    }
-
-    /**
-     * @param goTo the goTo to set
-     */
-    public void setGoTo(LinkedList<Integer> goTo) {
-        this.goTo = goTo;
-    }
-
-    /**
-     * @return the shift
-     */
-    public LinkedList<Integer> getShift() {
-        return shift;
-    }
-
-    /**
-     * @param shift the shift to set
-     */
-    public void setShift(LinkedList<Integer> shift) {
-        this.shift = shift;
-    }
-    
-    
     
 }
