@@ -71,6 +71,7 @@ public class GramaticaController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+    @SuppressWarnings("empty-statement")
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -82,9 +83,13 @@ public class GramaticaController extends HttpServlet {
            
             case "/gramatica":
                 
+                int gerador = 0;
                 String txtInput = request.getParameter("gramatica");
                 gramatica = new Gramatica(txtInput);
-                gramatica.setEstados(gramatica.gerarPrimeiroEstado());
+                gerador = gramatica.gerarEstado(gramatica.getProducoes().getFirst(), 0);
+                gramatica.mostrarEstados();
+                
+                
                 
                 session.setAttribute("gram", gramatica);
                 response.sendRedirect(request.getContextPath() + "/gramatica/estados");

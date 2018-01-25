@@ -14,28 +14,49 @@ import java.util.LinkedList;
 public class Estado {
     
     private int indice;
-    private Producao chave;
+    private LinkedList<Producao> chave;
     private LinkedList<Producao> producao;
     private LinkedList<Mudanca> mudancas;
     
-    public Estado (Producao pChave, int pIndice){
-        this.chave = pChave;
-        this.indice = pIndice;
-        this.mudancas = new LinkedList();
+    public Estado(){
+        this.chave = new LinkedList();
         this.producao = new LinkedList();
+        this.mudancas = new LinkedList();
+        this.indice = -1;
+    }
+    
+    public int verificarProducaoEstado(Producao teste){
+        for(Producao prod : this.producao){
+            if(prod.compararProducao(teste)){
+                return 1;
+            }
+        }
+        return 0;
+    }
+    
+    public void mostrarEstado(){
+        System.out.println("Estado: " + this.indice);
+        System.out.println("Chaves:");
+        for(Producao prod : this.chave){
+            prod.mostrarProducao();
+        }
+        System.out.println("Produções");
+        for(Producao prod : this.producao){
+            prod.mostrarProducao();
+        }
     }
 
     /**
      * @return the chave
      */
-    public Producao getChave() {
+    public LinkedList<Producao> getChave() {
         return chave;
     }
 
     /**
      * @param chave the chave to set
      */
-    public void setChave(Producao chave) {
+    public void setChave(LinkedList<Producao> chave) {
         this.chave = chave;
     }
 

@@ -28,50 +28,119 @@ public class Gramatica {
         for (int i = 0; i < linhas.length; i++) {
             if(linhas[i].compareTo("") != 1){
                 String linha = linhas[i].trim();
-                String nTerminal = linha.split("->")[0].trim();
-                String cadeia = linha.split("->")[1].trim();
+                String[] splitou = linha.split("->");
+                String nTerminal = splitou[0].trim();
+                String cadeia = "";
+                if(splitou.length > 1){
+                    cadeia = splitou[1].trim();
+                }
                 Producao prod = new Producao(nTerminal, cadeia, i);
-                this.producoes.add(prod);   
+                this.producoes.add(prod);
             }
         }
         for(Producao prod : this.producoes){
-            System.out.print(prod.getNaoTerminal() + " -> ");
-            preencheNaoTerminais(prod.getNaoTerminal());
-            for(String termo : prod.getCadeia()){
-                System.out.print(termo + " ");
-            }
-            System.out.println("");
+            prod.mostrarProducao();
+            this.preencheNaoTerminais(prod.getNaoTerminal());
         }
         this.estados = new LinkedList();
 
         PrintaNaoTerminais();
     }
-
     
-    public LinkedList<Estado> gerarPrimeiroEstado(){
-        Producao primeira = this.producoes.get(0);
-        Estado est = new Estado(primeira, 0);
-        Producao copia = new Producao(primeira.getNaoTerminal(), primeira.getCadeia(), primeira.getIndice());
-        copia.setPontoCorrente(0);
-        if(!copia.getCadeia().isEmpty()){
-            String next = copia.getCadeia().get(0);
-            // verificar se o termo é não terminal para adicionar produções
-            // fazer também tratamento de produção já tiver sido adicionada no estado com o ponto corrente certo
+    
+    @SuppressWarnings("empty-statement")
+    public int gerarEstado(Producao prod, int indice){
+        String naoTerminalCorrente = prod.getNaoTerminal();
+        Producao copia = prod.copiarProducao();
+
+        if(this.getEstados().isEmpty()){
+            copia.setPontoCorrente(0);
+            Estado est = new Estado();
+            est.setIndice(indice);
+            est.getChave().add(copia);
+            est.getProducao().add(copia);
+            // inserindo produções daquele não terminal
+            for(Producao teste : this.getProducoes()){
+                if(teste.getNaoTerminal().compareTo(naoTerminalCorrente) == 0){
+                    if(!teste.compararProducao(copia)){
+                        Producao inserir = teste.copiarProducao();
+                        inserir.setPontoCorrente(0);
+                        est.getChave().add(inserir);
+                        est.getProducao().add(inserir);
+                    }
+                }
+            }
+            while(this.adicionarProducaoEstado(est) == 1);
+            est.mostrarEstado();
+            this.getEstados().add(est);
+            return 1;
         }
+        else{
+            int procuraEstado = 0;
+            for(Estado est : this.estados){
+                for(Producao chaves : est.getChave()){
+                    if(chaves.compararProducao(prod)){
+                        procuraEstado = 1;
+                    }
+                }
+            }
+            if(procuraEstado == 1){
+                System.out.println("Já existe um estado com essa chave");
+                return 0;
+            }
+            else{
+                System.out.println("Não existe um estado com essa chave, adicionar novo estado");
+                Estado novoEstado = new Estado();
+                
+                return 1;
+            }
+        }
+    }
+    
+    private int adicionarProducaoEstado(Estado est){
+        int o = 0;
+        LinkedList<Producao> listaAdicionar = new LinkedList();
+        String termo;
         
-        return null;
+        for(Producao prod : est.getProducao()){
+            if(prod.getCadeia().size() > prod.getPontoCorrente()){
+                termo = prod.getCadeia().get(prod.getPontoCorrente());
+                if(this.getNaoTerminais().contains(termo)){
+                    for(Producao nTerminalProd : this.getProducoes()){
+                        if(nTerminalProd.getNaoTerminal().compareTo(termo) == 0){
+                            if(est.verificarProducaoEstado(nTerminalProd) == 0){
+                                Producao copia = nTerminalProd.copiarProducao();
+                                copia.setPontoCorrente(0);
+                                listaAdicionar.add(copia);
+                                o = 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        listaAdicionar.forEach((prod) -> {
+            est.getProducao().add(prod);
+        });
+        return o;
+    }
+    
+    public void mostrarEstados(){
+        for(Estado est : this.getEstados()){
+            est.mostrarEstado();
+        }
     }
     
     private void preencheNaoTerminais(String nomTerm){
         if(!this.naoTerminais.contains(nomTerm)){
-            this.naoTerminais.add(nomTerm);
+            this.getNaoTerminais().add(nomTerm);
         }
     }
     
     //funcao usada somente para teste, remover na versao final
     public void PrintaNaoTerminais(){
         System.out.print("não terminais: ");
-        Iterator<String> iterator = this.naoTerminais.iterator();
+        Iterator<String> iterator = this.getNaoTerminais().iterator();
 	while (iterator.hasNext()) {
 		System.out.print(iterator.next() + " ");
         }
@@ -113,7 +182,5 @@ public class Gramatica {
     public void setEstados(LinkedList<Estado> estados) {
         this.estados = estados;
     }
-    
-    
     
 }

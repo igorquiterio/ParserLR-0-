@@ -20,19 +20,57 @@ public class Producao {
     
     public Producao(String pNaoTerminal, String pCadeia, int index){
         this.naoTerminal = pNaoTerminal;
-        String[] termos = pCadeia.split(" ");
         this.cadeia = new LinkedList();
-        this.cadeia.addAll(Arrays.asList(termos));
+        if(pCadeia.length() > 0){
+            String[] termos = pCadeia.split(" ");
+            this.cadeia.addAll(Arrays.asList(termos));
+        }
         this.indice = index;
+        this.pontoCorrente = -1;
     }
     
     public Producao(String pNaoTerminal, LinkedList<String> pCadeia, int index){
         this.naoTerminal = pNaoTerminal;
         this.cadeia = pCadeia;
         this.indice = index;
+        this.pontoCorrente = -1;
     }
     
+    public Producao copiarProducao(){
+        Producao prod = new Producao(this.naoTerminal, this.cadeia, this.indice);
+        prod.setPontoCorrente(this.pontoCorrente);
+        return prod;
+    }
     
+    public boolean compararProducao(Producao prod){
+        if(prod.getIndice() == this.indice){
+            if(prod.getPontoCorrente() == this.pontoCorrente){
+                return true;
+            }
+            else if(prod.getPontoCorrente() == -1 || this.pontoCorrente == -1){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void mostrarProducao(){
+        System.out.print(this.naoTerminal + " ->");
+        int i = 0;
+        if(this.cadeia.isEmpty() && this.pontoCorrente != -1){
+            System.out.println(" .");
+        }
+        else{
+            for(String termo : this.cadeia){
+                if(i == this.pontoCorrente){
+                    System.out.print(" .");
+                }
+                i++;
+                System.out.print(" " + termo);
+            }
+            System.out.println();
+        }
+    }
     
     /**
      * @return the naoTerminal
