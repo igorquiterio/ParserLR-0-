@@ -16,6 +16,8 @@ Bibliotecas utilizadas
 ======================
 
 - [Bootstrap][1]
+- [JSTL][2]
+
 
 [1]: http://getbootstrap.com/
-
+[2]: https://jstl.java.net/
