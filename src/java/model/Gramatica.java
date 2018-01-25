@@ -19,6 +19,7 @@ public class Gramatica {
     private LinkedList<Estado> estados;
     private HashSet<String> naoTerminais;
     private HashSet<String> alfabeto;
+    private TabelaLR lr0;
 
     public Gramatica (String gramatica){
         String[] linhas = gramatica.split("\n",-1);
@@ -38,16 +39,17 @@ public class Gramatica {
                 }
                 Producao prod = new Producao(nTerminal, cadeia, i);
                 this.producoes.add(prod);
-                
+                this.preencheNaoTerminais(nTerminal);
+                this.preencheAlfabeto(nTerminal);
+                for (String simbol: prod.getCadeia()){
+                    this.preencheAlfabeto(simbol);
+                }
             }
         }
-        for(Producao prod : this.producoes){
-            prod.mostrarProducao();
-            this.preencheNaoTerminais(prod.getNaoTerminal());
-        }
+        
         this.estados = new LinkedList();
+        this.lr0 = new TabelaLR(naoTerminais, alfabeto, estados);
 
-        PrintaNaoTerminais();
     }
     
     @SuppressWarnings("empty-statement")
@@ -204,15 +206,20 @@ public class Gramatica {
             this.getNaoTerminais().add(nomTerm);
         }
     }
-    
-    //funcao usada somente para teste, remover na versao final
-    public void PrintaNaoTerminais(){
-        System.out.print("não terminais: ");
-        Iterator<String> iterator = this.getNaoTerminais().iterator();
-	while (iterator.hasNext()) {
-		System.out.print(iterator.next() + " ");
+
+    private void preencheAlfabeto(String simbol){
+        if(!this.alfabeto.contains(simbol)){
+            this.alfabeto.add(simbol);
         }
-        System.out.println("");
+    }
+    
+
+    public HashSet<String> getAlfabeto() {
+        return alfabeto;
+    }
+
+    public void setAlfabeto(HashSet<String> alfabeto) {
+        this.alfabeto = alfabeto;
     }
 
     public HashSet<String> getNaoTerminais() {
