@@ -42,49 +42,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    
+                                    <c:forEach var="u" items="${gram.estados}">
+                                    <th>${u.indice}</th>
                                         
-                                    <th>estado 0</th>
-                                        
-                                    <%--<c:forEach var="u" items="${clienteList}">--%>
+                                        <c:forEach var="p" items="${u.producao}">
                                         <tr>
                                             <td>
-                                                <span class="h4">S</span>
+                                                <span class="h4">${p.naoTerminal}</span>
                                             </td>
                                             <td>
                                                 <span class="h4"> -> </span>
                                             </td>
                                             <td>
-                                                <span class="h4">A b</span>
+                                                <c:forEach var="cad" items="${p.cadeia}">
+                                                <span class="h4">${cad}</span>
+                                                </c:forEach>
                                             </td>
 
                                         </tr>
-                                        
-                                        <tr>
-                                            <td>
-                                                <span class="h4">A</span>
-                                            </td>
-                                            <td>
-                                                <span class="h4"> -> </span>
-                                            </td>
-                                            <td>
-                                                <span class="h4">c </span>
-                                            </td>
-
-                                        </tr>
-                                        
-                                        <tr>
-                                            <td>
-                                                <span class="h4">A</span>
-                                            </td>
-                                            <td>
-                                                <span class="h4"> -> </span>
-                                            </td>
-                                            <td>
-                                                <span class="h4">d </span>
-                                            </td>
-
-                                        </tr>
-                                    <%--</c:forEach>--%>
+                                        </c:forEach>
+                                    </c:forEach>
                                 </tbody>
                             </table>
                         </td>
