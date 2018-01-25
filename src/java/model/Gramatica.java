@@ -80,7 +80,7 @@ public class Gramatica {
                 int indice = criarEstado(prod);
                 String termo = prod.getCadeia().get(prod.getPontoCorrente());
                 if(this.naoTerminais.contains(termo))
-                    est.adicionarGoTo(prod.getIndice());
+                    est.adicionarGoTo(indice);
                 else
                     est.adicionarShift(prod.getIndice());
                 Mudanca mud = new Mudanca(indice, termo, prod.getNaoTerminal());
