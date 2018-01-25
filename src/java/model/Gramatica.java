@@ -14,16 +14,18 @@ import java.util.LinkedList;
  * @author gustavo
  */
 public class Gramatica {
-    
+
     private LinkedList<Producao> producoes;
     private LinkedList<Estado> estados;
     private HashSet<String> naoTerminais;
-    
+    private HashSet<String> alfabeto;
+
     public Gramatica (String gramatica){
         String[] linhas = gramatica.split("\n",-1);
         
         this.naoTerminais = new HashSet();
         this.producoes = new LinkedList();
+        this.alfabeto = new HashSet<>();
         
         for (int i = 0; i < linhas.length; i++) {
             if(linhas[i].compareTo("") != 1){
@@ -36,6 +38,7 @@ public class Gramatica {
                 }
                 Producao prod = new Producao(nTerminal, cadeia, i);
                 this.producoes.add(prod);
+                
             }
         }
         for(Producao prod : this.producoes){
