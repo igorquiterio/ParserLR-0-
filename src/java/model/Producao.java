@@ -36,6 +36,9 @@ public class Producao {
         this.pontoCorrente = -1;
     }
     
+    /*
+    Retorna um cópia da produção
+    */
     public Producao copiarProducao(){
         Producao prod = new Producao(this.naoTerminal, this.cadeia, this.indice);
         prod.setPontoCorrente(this.pontoCorrente);

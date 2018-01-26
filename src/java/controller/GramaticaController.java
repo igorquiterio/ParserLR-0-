@@ -109,6 +109,9 @@ public class GramaticaController extends HttpServlet {
                 
                 
                 gramatica.mostrarEstados();
+                
+                gramatica.gerarTabelaEstados();
+                
                 session.setAttribute("gram", gramatica);
                 response.sendRedirect(request.getContextPath() + "/gramatica/estados");
                 break;

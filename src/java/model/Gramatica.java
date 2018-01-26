@@ -21,6 +21,9 @@ public class Gramatica {
     private HashSet<String> alfabeto;
     private TabelaLR lr0;
 
+    /*
+    Construção da gramática
+    */
     public Gramatica (String gramatica){
         String[] linhas = gramatica.split("\n",-1);
         
@@ -48,8 +51,15 @@ public class Gramatica {
         }
         
         this.estados = new LinkedList();
-        this.lr0 = new TabelaLR(naoTerminais, alfabeto, estados);
+//        this.lr0 = new TabelaLR(naoTerminais, alfabeto, estados);
 
+    }
+    
+    /*
+    Geração do diagrama dos estados e da tabela lr(0)
+    */
+    public void gerarTabelaEstados(){
+        this.lr0 = new TabelaLR(this.naoTerminais, this.alfabeto, this.estados);
     }
     
     @SuppressWarnings("empty-statement")
@@ -78,6 +88,9 @@ public class Gramatica {
         this.getEstados().add(est);
     }
     
+    /*
+    Percorre o estado est para geração de novos estados ou apenas uma conexão com algum já existente
+    */
     @SuppressWarnings("empty-statement")
     public LinkedList<Estado> gerarEstado(Estado est){
         LinkedList<Estado> novosEstados = new LinkedList();
@@ -159,16 +172,22 @@ public class Gramatica {
         return novosEstados;
     }
     
+    /*
+    Cria um estado com a produção prod sendo a chave
+    */
     private Estado criarEstado(Producao prod){
         Estado est = new Estado();
         est.getChave().add(prod);
         est.getProducao().add(prod);
         int ultimoIndice = this.getEstados().getLast().getIndice() + 1;
         est.setIndice(ultimoIndice);
-        this.estados.add(est);
         return est;
     }
     
+    /*
+    Adiciona ao estado produções
+    Exemplos: A -> . B (sendo B um não terminal, deve-se adicionar as produções dele)
+    */
     private int adicionarProducaoEstado(Estado est){
         int o = 0;
         LinkedList<Producao> listaAdicionar = new LinkedList();

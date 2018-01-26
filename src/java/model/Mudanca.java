@@ -20,6 +20,10 @@ public class Mudanca {
         this.naoTerminal = pNaoTerminal;
     }
     
+    
+    /*
+    Compara duas Mundanças e caso sejam iguais retorna true
+    */
     public boolean compararMudancas(Mudanca mud){
         if(mud.getEstadoDestino() == this.estadoDestino){
             if(mud.getNaoTerminal().compareTo(this.naoTerminal) == 0){
