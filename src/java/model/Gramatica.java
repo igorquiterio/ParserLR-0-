@@ -20,6 +20,7 @@ public class Gramatica {
     private HashSet<String> naoTerminais;
     private HashSet<String> alfabeto;
     private TabelaLR lr0;
+    private static int indEstados = 0;
 
     /*
     Construção da gramática
@@ -69,7 +70,7 @@ public class Gramatica {
         
         copia.setPontoCorrente(0);
         Estado est = new Estado();
-        est.setIndice(0);
+        est.setIndice(indEstados);
         est.getChave().add(copia);
         est.getProducao().add(copia);
         // inserindo produções daquele não terminal
@@ -179,7 +180,7 @@ public class Gramatica {
         Estado est = new Estado();
         est.getChave().add(prod);
         est.getProducao().add(prod);
-        int ultimoIndice = this.getEstados().getLast().getIndice() + 1;
+        int ultimoIndice = ++indEstados;
         est.setIndice(ultimoIndice);
         return est;
     }

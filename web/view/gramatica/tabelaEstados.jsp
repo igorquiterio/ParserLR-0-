@@ -18,12 +18,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th class="h4 text-center"> Tabelas </th>
+                        <th class="h4 text-center">  </th>
 
                         
                     </tr>
                     <tr>
-                        <th class="col-lg-4 h4">Tabelas dos Estados</th>
+                        <th class="col-lg-4 h4"></th>
                         <th class="col-lg-2 h4"></th>
                         <th class="col-lg-6 h4"></th>
 
@@ -36,15 +36,17 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="col-lg-1 h4">Nao Terminal</th>
-                                        <th class="col-lg-1 h4"> -> </th>
-                                        <th class="col-lg-2 h4">Produção</th>
+                                        <th class="col-lg-1 h4">Tabelas</th>
+                                        <th class="col-lg-1 h4"> dos </th>
+                                        <th class="col-lg-2 h4">Estados</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     
                                     <c:forEach var="u" items="${gram.estados}">
-                                    <th>${u.indice}</th>
+                                    <th>Estado            </th>
+                                    <th>${u.indice}                 </th>
+                                    <th>                  </th>
                                         
                                         <c:forEach var="p" items="${u.producao}">
                                         <tr>
@@ -55,9 +57,7 @@
                                                 <span class="h4"> -> </span>
                                             </td>
                                             <td>
-                                                <c:forEach var="cad" items="${p.cadeia}">
-                                                <span class="h4">${cad}</span>
-                                                </c:forEach>
+                                                <span class="h4"> ${p.ProducaoInteira()}</span>
                                             </td>
 
                                         </tr>
@@ -67,10 +67,10 @@
                             </table>
                         </td>
                         <td>
-                            ###
+                            
                         </td>
                         <td>
-                            ####
+                            
                         </td>
 
                     </tr>

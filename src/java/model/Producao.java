@@ -78,6 +78,28 @@ public class Producao {
         }
     }
     
+    public String ProducaoInteira(){
+        int i = 0;
+        StringBuilder saida = new StringBuilder();
+        if(this.cadeia.isEmpty() && this.pontoCorrente != -1){
+            saida.append(" .");
+        }
+        else{
+            for(String termo : this.cadeia){
+                if(i == this.pontoCorrente){
+                    saida.append(" .");
+                }
+                i++;
+                saida.append(" " + termo);
+            }
+            if(i == this.pontoCorrente){
+                saida.append(" .");
+            }
+        }
+        String finalString = saida.toString();
+        return finalString;
+    }
+    
     /**
      * @return the naoTerminal
      */
