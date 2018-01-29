@@ -52,7 +52,7 @@ public class Gramatica {
         }
         
         this.estados = new LinkedList();
-//        this.lr0 = new TabelaLR(naoTerminais, alfabeto, estados);
+        this.lr0 = new TabelaLR(naoTerminais, alfabeto, estados);
 
     }
     

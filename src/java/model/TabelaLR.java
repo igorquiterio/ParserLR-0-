@@ -30,6 +30,12 @@ public class TabelaLR {
             e para os goto(terminais) */
         tabela = new String[pEstados.size()][alfabeto.size() + 1];
         
+        for (int i = 0; i < pEstados.size(); i++) {
+            for (int j = 0; j < (alfabeto.size() + 1); j++) {
+                tabela[i][j] = new String("");
+            }
+        }
+        
         //separa terminal e nao terminal
         for (Iterator<String> iterator = alfabeto.iterator();
                 iterator.hasNext();) {
@@ -44,6 +50,31 @@ public class TabelaLR {
         for (int i = 0; i < indice.length; i++) {
             if (i < terminais.size()) {indice[i] = terminais.get(i);}
             else{indice[i] = naoTerminais.get(j++);}
+        }
+        
+        for (int i = 0; i < pEstados.size(); i++) {
+            Estado get = pEstados.get(i);
+            for (int k = 0; k < get.getMudancas().size(); k++) {
+                String termo = get.getMudancas().get(k).getTermo();
+                int destino = get.getMudancas().get(k).getEstadoDestino();
+                
+                int coluna = this.achaTermoNoIndice(termo);
+                
+                tabela[i][coluna] = (this.naoTerminais.contains(termo))?
+                        ("g "+destino) :("s "+destino);   
+            }
+        }
+        
+        for (int i = 0; i < indice.length; i++) {
+            System.out.print(indice[i]+ " ");
+        }
+        System.out.println("");
+        System.out.println("tabela");
+        for (int i = 0; i < pEstados.size(); i++) {
+            for (int k = 0; k < (alfabeto.size() + 1); k++) {
+                System.out.println(tabela[i][j]+" ");
+            }
+            System.out.println("");
         }
         
     }
@@ -80,6 +111,15 @@ public class TabelaLR {
 
     public void setTerminais(LinkedList<String> terminais) {
         this.terminais = terminais;
+    }
+    
+    private int achaTermoNoIndice(String termo){
+        for (int i = 0; i < indice.length; i++) {
+            if(termo.compareTo(indice[i]) == 0){
+                return i;
+            } 
+        }
+        return -1;
     }
     
 }

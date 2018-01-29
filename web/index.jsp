@@ -18,7 +18,7 @@
             <h2 class="form-signin-heading">Parser LR0</h2>
             <form class="form-group" action="${pageContext.servletContext.contextPath}/gramatica" method="POST">
                 <td>
-                    <textarea class="form-control" rows="10" cols="30" name="gramatica" placeholder=" S -> A b &#x0a A -> c &#x0a A -> d" ></textarea>
+                    <textarea class="form-control" rows="10" cols="30" name="gramatica" placeholder=" S -> A b &#x0a A -> b &#x0a A -> c" ></textarea>
                 </td>
                 <br>
                 <br>
