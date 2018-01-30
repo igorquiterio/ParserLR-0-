@@ -55,7 +55,7 @@ public class TabelaTrace {
                 else
                     this.aceito = -2;
             }
-            else if(acao.compareTo("a") == 0)
+            else if(split[0].compareTo("a") == 0)
                 this.aceito = 1;
             else
                 this.aceito = -1;
@@ -63,28 +63,30 @@ public class TabelaTrace {
                 estado = Integer.parseInt(pilha.getLast().split(" ")[1]);   
             }
             
-        }while(aceito == 0);
+        }while(this.aceito == 0);
         
         this.tabelaTrace = construirMatriz(linhas);
 
         this.reduces = gerarSequenciasReduces();
         
-        if(aceito == 1){
+        if(this.aceito == 1){
             System.out.println("Cadeia aceita");
         }
             else{
-                System.out.println("Cadei não aceita, erro: "+aceito);
+                System.out.println("Cadeia não aceita, erro: "+aceito);
             }
     }
     
     private LinkedList<Integer> gerarSequenciasReduces(){
         LinkedList<Integer> lista = new LinkedList();
         
-        for(int i=maxLinha-1; i>=0; i++){
-            if(this.tabelaTrace[i][3].contains("r")){
-                String acao = this.tabelaTrace[i][3];
-                String[] split = acao.split(" ");
-                lista.add(Integer.parseInt(split[1]));
+        for(int i=maxLinha-1; i>=0; i--){
+            String acao = this.tabelaTrace[i][3];
+            String[] split = acao.split(" ");
+            if(split.length > 1){
+                if(split[0].compareTo("r") == 0){
+                    lista.add(Integer.parseInt(split[1]));
+                }
             }
         }
         
