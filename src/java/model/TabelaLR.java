@@ -26,9 +26,7 @@ public class TabelaLR {
         
         naoTerminais = new LinkedList<>();
         terminais = new LinkedList<>();
-        System.out.println("Tamanho do alfabeto "+alfabeto.size());
         indice = new String[alfabeto.size() + 1];
-        System.out.println("Tamanho do indice "+indice.length);
         this.maxLinha = pEstados.size();
         this.maxColuna = (alfabeto.size() + 1);
         
@@ -66,19 +64,51 @@ public class TabelaLR {
                 
                 int coluna = this.achaTermoNoIndice(termo);
                 
-                tabela[i][coluna] = (this.naoTerminais.contains(termo))?
-                        tabela[i][coluna].concat("g "+destino+ " ") 
-                        :tabela[i][coluna].concat("s "+destino+ " "); 
+                String acao = tabela[i][coluna];
+                String[] split = acao.split(" ");
+                if(this.naoTerminais.contains(termo)){
+                    int existe = 0;
+                    for(int a=0; a<split.length; a++){
+                        if(split[a].compareTo("g") == 0 && split[a+1].compareTo(Integer.toString(destino)) == 0){
+                            existe = 1;
+                            break;
+                        }
+                    }
+                    if(existe == 0)
+                        tabela[i][coluna] = tabela[i][coluna].concat("g "+destino+ " ");
+                }
+                else{
+                    int existe = 0;
+                    for(int a=0; a<split.length; a++){
+                        if(split[a].compareTo("s") == 0 && split[a+1].compareTo(Integer.toString(destino)) == 0){
+                            existe = 1;
+                            break;
+                        }
+                    }
+                    if(existe == 0)
+                        tabela[i][coluna] = tabela[i][coluna].concat("s "+destino+ " ");
+                }
             }
             
             for (int k = 0; k < get.getReduce().size(); k++) {
                 int prodRed = get.getReduce().get(k);
                 if (prodRed == -1) {
                     int dollar = this.achaTermoNoIndice("$");
-                    tabela[i][dollar] = tabela[i][dollar].concat("a");
+                    String t = tabela[i][dollar];
+                    String[] tSplit = t.split(" ");
+                    int existe = 0;
+                    for(int a=0; a< tSplit.length; a++){
+                        if(tSplit[a].compareTo("a") == 0){
+                            existe = 1;
+                            break;
+                        }
+                    }
+                    if(existe == 0)
+                        tabela[i][dollar] = tabela[i][dollar].concat("a ");
                 }else{
                     for (int l = 0; l < tabela[i].length; l++) {
-                        tabela[i][l] = tabela[i][l].concat("r "+ prodRed + " ");
+                        if(!this.naoTerminais.contains(indice[l]))
+                            tabela[i][l] = tabela[i][l].concat("r "+ prodRed + " ");
                     }
                 }
             }                      
