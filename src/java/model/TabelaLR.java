@@ -20,6 +20,7 @@ public class TabelaLR {
     private String indice[];
     private int maxLinha;
     private int maxColuna;
+    private int aceita = 1;
 
     public TabelaLR( HashSet<String> pNterminais, HashSet<String> alfabeto,
             LinkedList<Estado> pEstados) {
@@ -127,6 +128,21 @@ public class TabelaLR {
             }
             System.out.println("");
         }
+        
+        this.verificarTabela();
+    }
+    
+    private void verificarTabela(){
+        for(int i=0; i<this.maxLinha; i++){
+            for(int j=0; j<this.maxColuna; j++){
+                if(this.tabela[i][j].split(" ").length > 2){
+                    aceita = 0;
+                    break;
+                }
+            }
+            if(aceita == 0)
+                break;
+        }
     }
 
     public int getMaxLinha() {
@@ -150,7 +166,7 @@ public class TabelaLR {
     }
 
     public void setIndice(String[] indice) {
-        this.indice = indice;
+        this.setIndice(indice);
     }
 
     
@@ -160,7 +176,7 @@ public class TabelaLR {
     }
 
     public void setTabela(String[][] tabela) {
-        this.tabela = tabela;
+        this.setTabela(tabela);
     }
 
     public LinkedList<String> getNaoTerminais() {
@@ -180,12 +196,26 @@ public class TabelaLR {
     }
     
     public int achaTermoNoIndice(String termo){
-        for (int i = 0; i < indice.length; i++) {
-            if(termo.compareTo(indice[i]) == 0){
+        for (int i = 0; i < getIndice().length; i++) {
+            if(termo.compareTo(getIndice()[i]) == 0){
                 return i;
             } 
         }
         return -1;
+    }
+
+    /**
+     * @return the aceita
+     */
+    public int getAceita() {
+        return aceita;
+    }
+
+    /**
+     * @param aceita the aceita to set
+     */
+    public void setAceita(int aceita) {
+        this.aceita = aceita;
     }
     
 }
