@@ -16,6 +16,7 @@ public class TabelaTrace {
     private String[][] tabelaTrace;
     private int maxLinha;
     private LinkedList<Producao> producoes;
+    private LinkedList<Integer> reduces;
     private TabelaLR lr0;
     private int aceito = 0;
     
@@ -63,15 +64,9 @@ public class TabelaTrace {
             
         }while(aceito == 0);
         
-//        System.out.println("################################################################################");
-//        for(String str : linhas){
-//            System.out.println(str);
-//        }
-//        System.out.println("################################################################################");
-        
         this.tabelaTrace = construirMatriz(linhas);
-        
-        this.mostrarTabela();
+
+        this.reduces = gerarSequenciasReduces();
         
         if(aceito == 1){
             System.out.println("Cadeia aceita");
@@ -79,6 +74,20 @@ public class TabelaTrace {
             else{
                 System.out.println("Cadei não aceita, erro: "+aceito);
             }
+    }
+    
+    private LinkedList<Integer> gerarSequenciasReduces(){
+        LinkedList<Integer> lista = new LinkedList();
+        
+        for(int i=maxLinha-1; i>=0; i++){
+            if(this.tabelaTrace[i][3].contains("r")){
+                String acao = this.tabelaTrace[i][3];
+                String[] split = acao.split(" ");
+                lista.add(Integer.parseInt(split[1]));
+            }
+        }
+        
+        return lista;
     }
     
     private String[][] construirMatriz(LinkedList<String> linhas){
