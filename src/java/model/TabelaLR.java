@@ -18,6 +18,8 @@ public class TabelaLR {
     private LinkedList<String> naoTerminais;
     private LinkedList<String> terminais;
     private String indice[];
+    private int maxLinha;
+    private int maxColuna;
 
     public TabelaLR( HashSet<String> pNterminais, HashSet<String> alfabeto,
             LinkedList<Estado> pEstados) {
@@ -25,13 +27,15 @@ public class TabelaLR {
         naoTerminais = new LinkedList<>();
         terminais = new LinkedList<>();
         indice = new String[alfabeto.size() + 1];
+        this.maxLinha = pEstados.size();
+        this.maxColuna = (alfabeto.size() + 1);
         
         /* aloca a tabela tendo espaço para os shift (nao terminais + $)
             e para os goto(terminais) */
-        tabela = new String[pEstados.size()][alfabeto.size() + 1];
+        tabela = new String[this.maxLinha][maxColuna];
         
-        for (int i = 0; i < pEstados.size(); i++) {
-            for (int j = 0; j < (alfabeto.size() + 1); j++) {
+        for (int i = 0; i < this.maxLinha; i++) {
+            for (int j = 0; j < maxColuna; j++) {
                 tabela[i][j] = new String("");
             }
         }
@@ -61,22 +65,46 @@ public class TabelaLR {
                 int coluna = this.achaTermoNoIndice(termo);
                 
                 tabela[i][coluna] = (this.naoTerminais.contains(termo))?
-                        ("g "+destino) :("s "+destino);   
+                        tabela[i][coluna].concat("g "+destino+ " ") 
+                        :tabela[i][coluna].concat("s "+destino+ " "); 
             }
+            
+            for (int k = 0; k < get.getReduce().size(); k++) {
+                for (int l = 0; l < tabela[i].length; l++) {
+                    tabela[i][l] = tabela[i][l].concat("r "+ get.getReduce().get(k));
+                }
+            }                      
+            
         }
         
-        for (int i = 0; i < indice.length; i++) {
-            System.out.print(indice[i]+ " ");
-        }
-        System.out.println("");
-        System.out.println("tabela");
-        for (int i = 0; i < pEstados.size(); i++) {
-            for (int k = 0; k < (alfabeto.size() + 1); k++) {
-                System.out.println(tabela[i][j]+" ");
-            }
-            System.out.println("");
-        }
         
+//        for (int i = 0; i < indice.length; i++) {
+//            System.out.print(indice[i]+ "    ");
+//        }
+//        System.out.println("");
+//        System.out.println("aqui");
+//        for (int i = 0; i < pEstados.size(); i++) {
+//            for (int k = 0; k < (alfabeto.size() + 1); k++) {
+//                System.out.print(tabela[i][k]+" ");
+//            }
+//            System.out.println("");
+//        }
+    }
+
+    public int getMaxLinha() {
+        return maxLinha;
+    }
+
+    public void setMaxLinha(int maxLinha) {
+        this.maxLinha = maxLinha;
+    }
+
+    public int getMaxColuna() {
+        return maxColuna;
+    }
+
+    public void setMaxColuna(int maxColuna) {
+        this.maxColuna = maxColuna;
     }
 
     public String[] getIndice() {

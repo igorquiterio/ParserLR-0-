@@ -108,7 +108,7 @@ public class GramaticaController extends HttpServlet {
                 }
                 
                 
-                gramatica.mostrarEstados();
+//                gramatica.mostrarEstados();
                 
                 gramatica.gerarTabelaEstados();
                 

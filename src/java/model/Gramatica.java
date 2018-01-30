@@ -53,7 +53,6 @@ public class Gramatica {
         
         this.estados = new LinkedList();
         this.lr0 = new TabelaLR(naoTerminais, alfabeto, estados);
-
     }
     
     /*
@@ -62,6 +61,7 @@ public class Gramatica {
     public void gerarTabelaEstados(){
         this.lr0 = new TabelaLR(this.naoTerminais, this.alfabeto, this.estados);
     }
+    
     
     @SuppressWarnings("empty-statement")
     public void gerarPrimeiroEstado(Producao prod){
