@@ -111,9 +111,41 @@
 
                 </tbody>
             </table>
-                <div class="center-block"> 
-                <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/">Pagina Inicial</a>  
-                </div>
+                                    
+           <table class="table table-striped table-bordered">
+                <thead>
+                        <tr>
+                            <th class="col-lg-1 h4">Indice</th>
+                            <th class="col-lg-5 h4">Pilha</th>
+                            <th class="col-lg-4 h4">cadeia</th>
+                            <th class="col-lg-2 h4 text-center">Ação</th>
+                        </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="i" items="${gram.tt.tabelaTrace}">
+                        <tr>
+                            <td>
+                                <span class="h4"><c:out value="${i[0]}"/></span>
+                            </td>
+                            <td>
+                                <span class="h4"><c:out value="${i[1]}"/></span>
+                            </td>
+                            <td>
+                                <span class="h4"><c:out value="${i[2]}"/></span>
+                            </td>
+                            <td>
+                                <span class="h4"><c:out value="${i[3]}"/></span>
+                            </td>
+                            
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+           
+                                    
+            <div class="center-block"> 
+            <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/">Pagina Inicial</a>  
+            </div>
         </div>
             
     </body>
