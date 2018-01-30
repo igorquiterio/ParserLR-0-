@@ -50,25 +50,93 @@ public class Gramatica {
                 }
             }
         }
-        
         this.estados = new LinkedList();
-        this.lr0 = new TabelaLR(naoTerminais, alfabeto, estados);
+    }
+    
+    public void inicializarGramatica(){
+        this.gerarPrimeiroEstado(this.producoes.getFirst());
+                
+        LinkedList<Estado> novosEstados = new LinkedList();
+        int gerador = 1;
+        int i;
+
+        while(gerador == 1){
+            for(i=0;i<this.estados.size(); i++){
+                novosEstados = this.gerarEstado(this.estados.get(i));
+                if(!novosEstados.isEmpty())
+                    break;
+            }
+            if(!novosEstados.isEmpty()){
+                for(Estado est : novosEstados){
+                    this.estados.add(est);
+                }
+            }
+            else
+                gerador = 0;
+        }
+        this.gerarTabelaEstados();
     }
     
     /*
     Geração do diagrama dos estados e da tabela lr(0)
     */
-    public void gerarTabelaEstados(){
+    private void gerarTabelaEstados(){
         this.lr0 = new TabelaLR(this.naoTerminais, this.alfabeto, this.estados);
     }
     
+    public void reconhecerCadeia(String pCadeia){
+        LinkedList<String> pilha = new LinkedList();
+        LinkedList<String> cadeia;
+        int estado = 1;
+        
+        cadeia = this.prepararCadeiaReconhecimento(pCadeia);
+        pilha.add("i 1");
+        
+        for(String termo : cadeia){
+            int coluna = this.lr0.achaTermoNoIndice("termo");
+            String acao = this.lr0.getTabela()[estado][coluna];
+            String[] split = acao.split(" ");
+            if(split.length == 2){
+                if(split[0].compareTo("s") == 0){
+                    pilha.add(termo.concat(" ").concat(split[1]));
+                }
+                else if(split[0].compareTo("g") == 0){
+                    String ultimo = pilha.getLast();
+                    String[] ultSplit = ultimo.split(" ");
+                    pilha.removeLast();
+                    pilha.add(ultSplit[0].concat(" ").concat(split[1]));
+                }
+                else if(split[0].compareTo("r") == 0){
+                    System.out.println("Fazer o reduce");
+                }
+                else
+                    System.out.println("Não é nem reduce, nem shift, nem go to");
+            }
+            else
+                System.out.println("Deu merda");
+            
+            estado = Integer.parseInt(pilha.getLast().split(" ")[1]);
+        }
+    }
+    
+    private LinkedList<String> prepararCadeiaReconhecimento(String cadeia){
+        LinkedList<String> lista = new LinkedList();
+        
+        String[] split = cadeia.split(" ");
+        for(int i=0; i<split.length; i++){
+            lista.add(split[i]);
+        }
+        
+        return lista;
+    }
     
     @SuppressWarnings("empty-statement")
-    public void gerarPrimeiroEstado(Producao prod){
+    private void gerarPrimeiroEstado(Producao prod){
         String naoTerminalCorrente = prod.getNaoTerminal();
         Producao copia = prod.copiarProducao();
         
         copia.setPontoCorrente(0);
+        copia.getCadeia().add("$");
         Estado est = new Estado();
         est.setIndice(indEstados);
         est.getChave().add(copia);
@@ -79,6 +147,7 @@ public class Gramatica {
                 if(!teste.compararProducao(copia)){
                     Producao inserir = teste.copiarProducao();
                     inserir.setPontoCorrente(0);
+                    inserir.getCadeia().add("$");
                     est.getChave().add(inserir);
                     est.getProducao().add(inserir);
                 }
@@ -93,7 +162,7 @@ public class Gramatica {
     Percorre o estado est para geração de novos estados ou apenas uma conexão com algum já existente
     */
     @SuppressWarnings("empty-statement")
-    public LinkedList<Estado> gerarEstado(Estado est){
+    private LinkedList<Estado> gerarEstado(Estado est){
         LinkedList<Estado> novosEstados = new LinkedList();
         LinkedList<Mudanca> novasMudancas = new LinkedList();
 
@@ -106,53 +175,58 @@ public class Gramatica {
             }
             else{
                 String termo = prod.getCadeia().get(prod.getPontoCorrente());
-                Mudanca mud = null;
-                int existeMudanca = 0;
-                // procurando no estado alguma mudanca com o mesmo termo
-                for(Mudanca teste : est.getMudancas()){
-                    if(teste.getTermo().compareTo(termo) == 0){
-                        mud = teste;
-                        existeMudanca = 1;
-                        // mudanca futura já existente
-                        if(teste.getNaoTerminal().compareTo(prod.getNaoTerminal()) == 0){
-                            mud = null;
-                            existeMudanca = 2;
-                            break;
-                        }
-                    }
+                if(termo.compareTo("$") == 0){
+                    est.adicionarReduce(-1);
                 }
-                // criar nova mudanca
-                if(existeMudanca == 0){
-                    // verificar se algum estado tem essa produção como chave
-                    int encontrouEstadoChave = 0;
-                    for(int i=0;i<this.estados.size(); i++){
-                        Estado teste = this.estados.get(i);
-                        for(Producao chave : teste.getChave()){
-                            if(chave.compararProducao(copia)){
-                                encontrouEstadoChave = 1;
-                                mud = new Mudanca(teste.getIndice(), termo, copia.getNaoTerminal());
-                                novasMudancas.add(mud);
+                else{
+                    Mudanca mud = null;
+                    int existeMudanca = 0;
+                    // procurando no estado alguma mudanca com o mesmo termo
+                    for(Mudanca teste : est.getMudancas()){
+                        if(teste.getTermo().compareTo(termo) == 0){
+                            mud = teste;
+                            existeMudanca = 1;
+                            // mudanca futura já existente
+                            if(teste.getNaoTerminal().compareTo(prod.getNaoTerminal()) == 0){
+                                mud = null;
+                                existeMudanca = 2;
                                 break;
                             }
                         }
                     }
-                    if(encontrouEstadoChave == 0){
-                        Estado estadoNovo = criarEstado(copia);
-                        novosEstados.add(estadoNovo);
-                        mud = new Mudanca(estadoNovo.getIndice(), termo, copia.getNaoTerminal());
-                        est.getMudancas().add(mud);
-                        while(this.adicionarProducaoEstado(estadoNovo) == 1);
+                    // criar nova mudanca
+                    if(existeMudanca == 0){
+                        // verificar se algum estado tem essa produção como chave
+                        int encontrouEstadoChave = 0;
+                        for(int i=0;i<this.estados.size(); i++){
+                            Estado teste = this.estados.get(i);
+                            for(Producao chave : teste.getChave()){
+                                if(chave.compararProducao(copia)){
+                                    encontrouEstadoChave = 1;
+                                    mud = new Mudanca(teste.getIndice(), termo, copia.getNaoTerminal());
+                                    novasMudancas.add(mud);
+                                    break;
+                                }
+                            }
+                        }
+                        if(encontrouEstadoChave == 0){
+                            Estado estadoNovo = criarEstado(copia);
+                            novosEstados.add(estadoNovo);
+                            mud = new Mudanca(estadoNovo.getIndice(), termo, copia.getNaoTerminal());
+                            est.getMudancas().add(mud);
+                            while(this.adicionarProducaoEstado(estadoNovo) == 1);
+                        }
                     }
-                }
-                // fazer com que essa mudanca vá para o mesmo estado
-                else if(existeMudanca == 1){
-                    int estadoSuspeito = mud.getEstadoDestino();
-                    Estado teste = this.estados.get(estadoSuspeito);
-                    mud = new Mudanca(estadoSuspeito, termo, copia.getNaoTerminal());
-                    est.getMudancas().add(mud);
-                    teste.getChave().add(copia);
-                    teste.getProducao().add(copia);
-                    while(this.adicionarProducaoEstado(teste) == 1);
+                    // fazer com que essa mudanca vá para o mesmo estado
+                    else if(existeMudanca == 1){
+                        int estadoSuspeito = mud.getEstadoDestino();
+                        Estado teste = this.estados.get(estadoSuspeito);
+                        mud = new Mudanca(estadoSuspeito, termo, copia.getNaoTerminal());
+                        est.getMudancas().add(mud);
+                        teste.getChave().add(copia);
+                        teste.getProducao().add(copia);
+                        while(this.adicionarProducaoEstado(teste) == 1);
+                    }
                 }
             }
         }

@@ -78,17 +78,17 @@ public class TabelaLR {
         }
         
         
-//        for (int i = 0; i < indice.length; i++) {
-//            System.out.print(indice[i]+ "    ");
-//        }
-//        System.out.println("");
-//        System.out.println("aqui");
-//        for (int i = 0; i < pEstados.size(); i++) {
-//            for (int k = 0; k < (alfabeto.size() + 1); k++) {
-//                System.out.print(tabela[i][k]+" ");
-//            }
-//            System.out.println("");
-//        }
+        for (int i = 0; i < indice.length; i++) {
+            System.out.print(indice[i]+ "    ");
+        }
+        System.out.println("");
+        System.out.println("aqui");
+        for (int i = 0; i < pEstados.size(); i++) {
+            for (int k = 0; k < (alfabeto.size() + 1); k++) {
+                System.out.print(tabela[i][k]+" ");
+            }
+            System.out.println("");
+        }
     }
 
     public int getMaxLinha() {
@@ -141,7 +141,7 @@ public class TabelaLR {
         this.terminais = terminais;
     }
     
-    private int achaTermoNoIndice(String termo){
+    public int achaTermoNoIndice(String termo){
         for (int i = 0; i < indice.length; i++) {
             if(termo.compareTo(indice[i]) == 0){
                 return i;

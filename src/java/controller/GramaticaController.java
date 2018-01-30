@@ -85,32 +85,9 @@ public class GramaticaController extends HttpServlet {
            
             case "/gramatica":
                 String txtInput = request.getParameter("gramatica");
+                
                 gramatica = new Gramatica(txtInput);
-                gramatica.gerarPrimeiroEstado(gramatica.getProducoes().getFirst());
-                
-                LinkedList<Estado> novosEstados = new LinkedList();
-                int gerador = 1;
-                int i;
-                
-                while(gerador == 1){
-                    for(i=0;i<gramatica.getEstados().size(); i++){
-                        novosEstados = gramatica.gerarEstado(gramatica.getEstados().get(i));
-                        if(!novosEstados.isEmpty())
-                            break;
-                    }
-                    if(!novosEstados.isEmpty()){
-                        for(Estado est : novosEstados){
-                            gramatica.getEstados().add(est);
-                        }
-                    }
-                    else
-                        gerador = 0;
-                }
-                
-                
-//                gramatica.mostrarEstados();
-                
-                gramatica.gerarTabelaEstados();
+                gramatica.inicializarGramatica();
                 
                 session.setAttribute("gram", gramatica);
                 response.sendRedirect(request.getContextPath() + "/gramatica/estados");
