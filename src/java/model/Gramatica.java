@@ -57,12 +57,26 @@ public class Gramatica {
     */
     public Gramatica (String gramatica){
         indEstados = 0;
-        String[] linhas = gramatica.split("\n",-1);
+        String[] aux = gramatica.split("\n",-1);
+        String[] split = null;
+        String primeiraLinha = "";
+        if(aux.length > 0)
+            split = aux[0].split(" ");
+        if(split != null && split.length > 0)
+            primeiraLinha = "Slinh -> ".concat(split[0]);
+        System.out.println(primeiraLinha);
+        
+        String[] linhas = new String[aux.length+1];
+        for(int i=0; i<linhas.length; i++){
+            if(i == 0)
+                linhas[i] = primeiraLinha;
+            else
+                linhas[i] = aux[i-1];
+        }
         
         this.naoTerminais = new HashSet();
         this.producoes = new LinkedList();
         this.alfabeto = new HashSet<>();
-        String primeiroNaoTerminal = "";
         
         for (int i = 0; i < linhas.length; i++) {
             if(linhas[i].compareTo("") != 1){
