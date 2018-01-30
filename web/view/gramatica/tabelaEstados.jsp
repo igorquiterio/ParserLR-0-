@@ -115,9 +115,9 @@
                                             
                                             <div class="center-block">                    
                                                 <form class="form-inline" action="${pageContext.servletContext.contextPath}/gramatica/trace" method="POST">                        
-
+                                                        
                                                     <div class="input-group mb-4 mr-sm-4 mb-sm-0">
-                                                        <input class="form-control" type="text" name="cadeia" placeholder="cadeia" required autofocus>
+                                                        <input class="form-control" type="text" name="cadeia" placeholder="cadeia $" required autofocus>
 
                                                     </div>
                                                     <button class="btn btn-primary" type="submit">Submeter</button>

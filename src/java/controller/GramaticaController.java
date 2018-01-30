@@ -20,7 +20,7 @@ import model.TabelaTrace;
  *
  * @author quiterio
  */
-@WebServlet(name = "gramatica", urlPatterns = {"/gramatica", "/gramatica/estados", "/gramatica/trace" , "/gramatica/produz_cadeia"})
+@WebServlet(name = "gramatica", urlPatterns = {"/gramatica", "/gramatica/estados", "/gramatica/trace", "/gramatica/produz_cadeia"})
 public class GramaticaController extends HttpServlet {
 
     /**
@@ -32,8 +32,6 @@ public class GramaticaController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -46,31 +44,35 @@ public class GramaticaController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         Gramatica gramatica;
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
         switch (request.getServletPath()) {
-           
+
             case "/gramatica/estados":
-                
-                dispatcher = request.getRequestDispatcher("/view/gramatica/tabelaEstados.jsp");
-                dispatcher.forward(request, response);
-                
+                try {
+                    dispatcher = request.getRequestDispatcher("/view/gramatica/tabelaEstados.jsp");
+                    dispatcher.forward(request, response);
+                } catch (Exception e) {
+                    dispatcher = request.getRequestDispatcher("/view/gramatica");
+                    dispatcher.forward(request, response);
+                }
+
                 break;
-                
+
             case "/gramatica/produz_cadeia":
-                gramatica = (Gramatica) session.getAttribute("gram");
-//                gramatica.getTt().mostrarTabela();
-//                System.out.println(gramatica.getTt()[1][2]);
-//                if(gramatica.getTt().getAceito() == 1){
+                try {
+                    gramatica = (Gramatica) session.getAttribute("gram");
+
                     dispatcher = request.getRequestDispatcher("/view/gramatica/tabelaTrace.jsp");
                     dispatcher.forward(request, response);
-//                }
-//                else{
-//                    dispatcher = request.getRequestDispatcher("/view/gramatica/naoLR0.jsp");
-//                    dispatcher.forward(request, response);
-//                }
+                } catch (Exception e) {
+
+                    dispatcher = request.getRequestDispatcher("/gramatica/estados");
+                    dispatcher.forward(request, response);
+                }
+
                 break;
         }
     }
@@ -87,37 +89,43 @@ public class GramaticaController extends HttpServlet {
     @SuppressWarnings("empty-statement")
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         Gramatica gramatica;
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
-        
+
         switch (request.getServletPath()) {
-           
+
             case "/gramatica":
-                String txtInput = request.getParameter("gramatica");
-                
-                gramatica = new Gramatica(txtInput);
-                gramatica.inicializarGramatica();
-                
-//                TabelaTrace tt = new TabelaTrace(gramatica, "c c c c a b $");
-                
-                session.setAttribute("gram", gramatica);
-                response.sendRedirect(request.getContextPath() + "/gramatica/estados");
+                try {
+                    String txtInput = request.getParameter("gramatica");
+
+                    gramatica = new Gramatica(txtInput);
+                    gramatica.inicializarGramatica();
+
+                    session.setAttribute("gram", gramatica);
+                    response.sendRedirect(request.getContextPath() + "/gramatica/estados");
+                } catch (Exception e) {
+                    response.sendRedirect(request.getContextPath() + "/gramatica");
+                }
+
                 break;
-                
+
             case "/gramatica/trace":
-                
-                  gramatica = (Gramatica) session.getAttribute("gram");
-                  String cadeia = request.getParameter("cadeia");
-                  System.out.println(cadeia);
-                  gramatica.iniciaTrace(cadeia);
-                  session.setAttribute("gram", gramatica);
-                  response.sendRedirect(request.getContextPath() + "/gramatica/produz_cadeia");
-                
+                try {
+                    gramatica = (Gramatica) session.getAttribute("gram");
+                    String cadeia = request.getParameter("cadeia");
+                    System.out.println(cadeia);
+                    gramatica.iniciaTrace(cadeia);
+                    session.setAttribute("gram", gramatica);
+                    response.sendRedirect(request.getContextPath() + "/gramatica/produz_cadeia");
+                } catch (Exception e) {
+                    response.sendRedirect(request.getContextPath() + "/gramatica/estados");
+                }
+
                 break;
         }
-        
+
     }
 
     /**
