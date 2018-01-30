@@ -21,7 +21,7 @@ import model.Gramatica;
  *
  * @author quiterio
  */
-@WebServlet(name = "gramatica", urlPatterns = {"/gramatica", "/gramatica/estados"})
+@WebServlet(name = "gramatica", urlPatterns = {"/gramatica", "/gramatica/estados", "/gramatica/trace" , "/gramatica/produz_cadeia"})
 public class GramaticaController extends HttpServlet {
 
     /**
@@ -55,11 +55,21 @@ public class GramaticaController extends HttpServlet {
            
             case "/gramatica/estados":
                 
-//                gramatica = (Gramatica) session.getAttribute("gram");
-                
                 dispatcher = request.getRequestDispatcher("/view/gramatica/tabelaEstados.jsp");
                 dispatcher.forward(request, response);
                 
+                break;
+                
+            case "/gramatica/produz_cadeia":
+                gramatica = (Gramatica) session.getAttribute("gram");
+                if(gramatica.getAceita() == 1){
+                    dispatcher = request.getRequestDispatcher("/view/gramatica/tabelaTrace.jsp");
+                    dispatcher.forward(request, response);
+                }
+//                else{
+//                    dispatcher = request.getRequestDispatcher("/view/gramatica/naoLR0.jsp");
+//                    dispatcher.forward(request, response);
+//                }
                 break;
         }
     }
@@ -91,6 +101,17 @@ public class GramaticaController extends HttpServlet {
                 
                 session.setAttribute("gram", gramatica);
                 response.sendRedirect(request.getContextPath() + "/gramatica/estados");
+                break;
+                
+            case "/gramatica/trace":
+                
+                  gramatica = (Gramatica) session.getAttribute("gram");
+                  String cadeia = request.getParameter("cadeia");
+                  System.out.println(cadeia);
+                  gramatica.setAceita(1);
+                  session.setAttribute("gram", gramatica);
+                  response.sendRedirect(request.getContextPath() + "/gramatica/produz_cadeia");
+                
                 break;
         }
         
