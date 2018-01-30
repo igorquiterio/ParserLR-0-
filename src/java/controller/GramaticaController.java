@@ -62,6 +62,7 @@ public class GramaticaController extends HttpServlet {
             case "/gramatica/produz_cadeia":
                 gramatica = (Gramatica) session.getAttribute("gram");
 //                gramatica.getTt().mostrarTabela();
+//                System.out.println(gramatica.getTt()[1][2]);
 //                if(gramatica.getTt().getAceito() == 1){
                     dispatcher = request.getRequestDispatcher("/view/gramatica/tabelaTrace.jsp");
                     dispatcher.forward(request, response);

@@ -18,6 +18,7 @@ public class TabelaTrace {
     private LinkedList<Producao> producoes;
     private TabelaLR lr0;
     private int aceito = 0;
+    private LinkedList<String> linhas;
     
     public TabelaTrace(TabelaLR lr0, String pCadeia, LinkedList<Producao> producoes) {
         LinkedList<String> pilha = new LinkedList();
@@ -82,6 +83,8 @@ public class TabelaTrace {
     }
     
     private String[][] construirMatriz(LinkedList<String> linhas){
+        this.linhas = new LinkedList<String>();
+        this.linhas = linhas;
         String[][] tabela = new String[linhas.size()][4];
         this.setMaxLinha(linhas.size());
         for(int i=0; i<linhas.size(); i++){
@@ -159,6 +162,14 @@ public class TabelaTrace {
         }
         
         return lista;
+    }
+
+    public LinkedList<String> getLinhas() {
+        return linhas;
+    }
+
+    public void setLinhas(LinkedList<String> linhas) {
+        this.linhas = linhas;
     }
 
     /**
