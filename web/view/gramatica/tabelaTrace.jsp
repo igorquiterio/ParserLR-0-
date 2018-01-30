@@ -1,8 +1,9 @@
 <%-- 
-    Document   : tabelaEstados
-    Created on : Jan 23, 2018, 10:53:37 AM
+    Document   : tabelaTrace
+    Created on : Jan 30, 2018, 4:57:56 PM
     Author     : quiterio
 --%>
+
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -110,18 +111,9 @@
 
                 </tbody>
             </table>
-                <div class="center-block">                    
-            <form class="form-inline" action="${pageContext.servletContext.contextPath}/gramatica/trace" method="POST">                        
-                
-                <div class="input-group mb-4 mr-sm-4 mb-sm-0">
-                <input class="form-control" type="text" name="cadeia" placeholder="cadeia" required autofocus>
-                
+                <div class="center-block"> 
+                <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/">Pagina Inicial</a>  
                 </div>
-                <button class="btn btn-primary" type="submit">Submeter</button>
-                <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/">Voltar</a>
-            </form>                        
-            </div>
-            
         </div>
             
     </body>

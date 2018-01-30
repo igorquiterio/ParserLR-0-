@@ -22,6 +22,23 @@ public class Gramatica {
     private TabelaLR lr0;
     private TabelaTrace tt;
     private int indEstados = 0;
+    private int aceita = 0;
+
+    public int getIndEstados() {
+        return indEstados;
+    }
+
+    public void setIndEstados(int indEstados) {
+        this.indEstados = indEstados;
+    }
+
+    public int getAceita() {
+        return aceita;
+    }
+
+    public void setAceita(int aceita) {
+        this.aceita = aceita;
+    }
 
     /*
     Construção da gramática
