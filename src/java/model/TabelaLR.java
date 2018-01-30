@@ -72,8 +72,14 @@ public class TabelaLR {
             }
             
             for (int k = 0; k < get.getReduce().size(); k++) {
-                for (int l = 0; l < tabela[i].length; l++) {
-                    tabela[i][l] = tabela[i][l].concat("r "+ get.getReduce().get(k));
+                int prodRed = get.getReduce().get(k);
+                if (prodRed == -1) {
+                    int dollar = this.achaTermoNoIndice("$");
+                    tabela[i][dollar] = tabela[i][dollar].concat("Acc");
+                }else{
+                    for (int l = 0; l < tabela[i].length; l++) {
+                        tabela[i][l] = tabela[i][l].concat("r "+ prodRed);
+                    }
                 }
             }                      
             

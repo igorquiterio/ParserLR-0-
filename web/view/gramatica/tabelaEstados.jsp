@@ -33,7 +33,7 @@
 
                     <tr>
                         <td>
-                            <table class="table table-striped">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th class="col-lg-1 h4">Tabelas</th>
@@ -43,11 +43,12 @@
                                 </thead>
                                 <tbody>
                                     
-                                    <c:forEach var="u" items="${gram.estados}">
+                                    <c:forEach var="u" items="${gram.estados}"> 
+                                    <tr class="bg-info">
                                     <th>Estado            </th>
                                     <th>${u.indice}                 </th>
                                     <th>                  </th>
-                                        
+                                    </tr>    
                                         <c:forEach var="p" items="${u.producao}">
                                         <tr>
                                             <td>
@@ -62,7 +63,9 @@
 
                                         </tr>
                                         </c:forEach>
+                                        <tr><th></th><th></th><th></th></tr>
                                     </c:forEach>
+                                        
                                 </tbody>
                             </table>
                         </td>
@@ -72,7 +75,7 @@
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr><h3>Tabela LR0</h3></tr>
-                                    <tr>
+                                    <tr  class="table-dark">
                                         <th class="col-lg-1 h4 text-center">Estado</th>
                                         <th class="col-lg-6 h4 text-center" colspan="${gram.lr0.maxColuna}">Ação</th>
                                     </tr>
