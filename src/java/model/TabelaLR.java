@@ -26,7 +26,9 @@ public class TabelaLR {
         
         naoTerminais = new LinkedList<>();
         terminais = new LinkedList<>();
+        System.out.println("Tamanho do alfabeto "+alfabeto.size());
         indice = new String[alfabeto.size() + 1];
+        System.out.println("Tamanho do indice "+indice.length);
         this.maxLinha = pEstados.size();
         this.maxColuna = (alfabeto.size() + 1);
         

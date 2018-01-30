@@ -74,7 +74,7 @@
                                     <tr><h3>Tabela LR0</h3></tr>
                                     <tr>
                                         <th class="col-lg-1 h4 text-center">Estado</th>
-                                        <th class="col-lg-6 h4 text-center" colspan="${gram.lr0.maxLinha}">Ação</th>
+                                        <th class="col-lg-6 h4 text-center" colspan="${gram.lr0.maxColuna}">Ação</th>
                                     </tr>
                                     <tr>
                                         <th></th>

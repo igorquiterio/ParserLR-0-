@@ -20,7 +20,7 @@ public class Gramatica {
     private HashSet<String> naoTerminais;
     private HashSet<String> alfabeto;
     private TabelaLR lr0;
-    private static int indEstados = 0;
+    private int indEstados = 0;
 
     /*
     Construção da gramática
@@ -82,7 +82,7 @@ public class Gramatica {
     Geração do diagrama dos estados e da tabela lr(0)
     */
     private void gerarTabelaEstados(){
-        this.lr0 = new TabelaLR(this.naoTerminais, this.alfabeto, this.estados);
+        this.setLr0(new TabelaLR(this.naoTerminais, this.alfabeto, this.estados));
     }
     
     public void reconhecerCadeia(String pCadeia){
@@ -94,8 +94,8 @@ public class Gramatica {
         pilha.add("i 1");
         
         for(String termo : cadeia){
-            int coluna = this.lr0.achaTermoNoIndice("termo");
-            String acao = this.lr0.getTabela()[estado][coluna];
+            int coluna = this.getLr0().achaTermoNoIndice("termo");
+            String acao = this.getLr0().getTabela()[estado][coluna];
             String[] split = acao.split(" ");
             if(split.length == 2){
                 if(split[0].compareTo("s") == 0){
@@ -352,6 +352,20 @@ public class Gramatica {
      */
     public void setEstados(LinkedList<Estado> estados) {
         this.estados = estados;
+    }
+
+    /**
+     * @return the lr0
+     */
+    public TabelaLR getLr0() {
+        return lr0;
+    }
+
+    /**
+     * @param lr0 the lr0 to set
+     */
+    public void setLr0(TabelaLR lr0) {
+        this.lr0 = lr0;
     }
     
 }
