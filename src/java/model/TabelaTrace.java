@@ -17,14 +17,13 @@ public class TabelaTrace {
     private int maxLinha;
     private LinkedList<Producao> producoes;
     private TabelaLR lr0;
-    
+    private int aceito = 0;
     
     public TabelaTrace(TabelaLR lr0, String pCadeia, LinkedList<Producao> producoes) {
         LinkedList<String> pilha = new LinkedList();
         LinkedList<String> cadeia;
         LinkedList<String> linhas = new LinkedList();
         int estado = 0;
-        int aceito = 0;
         this.producoes = producoes;
         this.lr0 = lr0;
         
@@ -49,15 +48,15 @@ public class TabelaTrace {
                     System.out.println("Fazendo o reduce");
                     pilha = this.fazerReduce(pilha, Integer.parseInt(split[1]));
                     if(pilha == null)
-                        aceito = -3;
+                        this.aceito = -3;
                 }
                 else
-                    aceito = -2;
+                    this.aceito = -2;
             }
             else if(acao.compareTo("a") == 0)
-                aceito = 1;
+                this.aceito = 1;
             else
-                aceito = -1;
+                this.aceito = -1;
             if(pilha != null){
                 estado = Integer.parseInt(pilha.getLast().split(" ")[1]);   
             }
@@ -74,11 +73,12 @@ public class TabelaTrace {
         
         this.mostrarTabela();
         
-        if(aceito == 1)
+        if(aceito == 1){
             System.out.println("Cadeia aceita");
-        else
-            System.out.println("Cadei não aceita, erro: "+aceito);
-        
+        }
+            else{
+                System.out.println("Cadei não aceita, erro: "+aceito);
+            }
     }
     
     private String[][] construirMatriz(LinkedList<String> linhas){
@@ -216,5 +216,14 @@ public class TabelaTrace {
     public void setTabelaTrace(String[][] tabelaTrace) {
         this.tabelaTrace = tabelaTrace;
     }
+
+    public int getAceito() {
+        return aceito;
+    }
+
+    public void setAceito(int aceito) {
+        this.aceito = aceito;
+    }
+    
     
 }

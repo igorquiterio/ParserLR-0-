@@ -61,10 +61,11 @@ public class GramaticaController extends HttpServlet {
                 
             case "/gramatica/produz_cadeia":
                 gramatica = (Gramatica) session.getAttribute("gram");
-                if(gramatica.getAceita() == 1){
+//                gramatica.getTt().mostrarTabela();
+//                if(gramatica.getTt().getAceito() == 1){
                     dispatcher = request.getRequestDispatcher("/view/gramatica/tabelaTrace.jsp");
                     dispatcher.forward(request, response);
-                }
+//                }
 //                else{
 //                    dispatcher = request.getRequestDispatcher("/view/gramatica/naoLR0.jsp");
 //                    dispatcher.forward(request, response);
@@ -109,7 +110,7 @@ public class GramaticaController extends HttpServlet {
                   gramatica = (Gramatica) session.getAttribute("gram");
                   String cadeia = request.getParameter("cadeia");
                   System.out.println(cadeia);
-                  gramatica.setAceita(1);
+                  gramatica.iniciaTrace(cadeia);
                   session.setAttribute("gram", gramatica);
                   response.sendRedirect(request.getContextPath() + "/gramatica/produz_cadeia");
                 

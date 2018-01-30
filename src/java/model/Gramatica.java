@@ -24,6 +24,18 @@ public class Gramatica {
     private int indEstados = 0;
     private int aceita = 0;
 
+    public TabelaTrace getTt() {
+        return tt;
+    }
+
+    public void setTt(TabelaTrace tt) {
+        this.tt = tt;
+    }
+    
+    public void iniciaTrace(String cadeia){
+        this.tt =  new TabelaTrace(lr0, cadeia, producoes);
+//        tt.getTabelaTrace();
+    }
     public int getIndEstados() {
         return indEstados;
     }
