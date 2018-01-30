@@ -3,8 +3,7 @@ ParserLR(0)
 ======================
 Left-to-right parsing, Rightmost-derivation 0 Parser
 
-Projeto de um parser LR(0) em JavaEE para análises sintáticas em MVC
-
+Projeto de um parser LR(0) em JavaEE 
 
 Versionamento
 =======================
