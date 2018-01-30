@@ -26,6 +26,7 @@ public class Gramatica {
     Construção da gramática
     */
     public Gramatica (String gramatica){
+        indEstados = 0;
         String[] linhas = gramatica.split("\n",-1);
         
         this.naoTerminais = new HashSet();
