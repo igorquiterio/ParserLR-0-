@@ -26,6 +26,7 @@ public class Gramatica {
     Construção da gramática
     */
     public Gramatica (String gramatica){
+        indEstados = 0;
         String[] linhas = gramatica.split("\n",-1);
         
         this.naoTerminais = new HashSet();
@@ -52,7 +53,14 @@ public class Gramatica {
         }
         
         this.estados = new LinkedList();
-        this.lr0 = new TabelaLR(naoTerminais, alfabeto, estados);
+    }
+
+    public TabelaLR getLr0() {
+        return lr0;
+    }
+
+    public void setLr0(TabelaLR lr0) {
+        this.lr0 = lr0;
     }
     
     /*
