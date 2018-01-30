@@ -117,8 +117,8 @@
                                             <tr>
                                                 <th class="col-lg-1 h4">Indice</th>
                                                 <th class="col-lg-5 h4">Pilha</th>
-                                                <th class="col-lg-4 h4">cadeia</th>
-                                                <th class="col-lg-2 h4 text-center">Ação</th>
+                                                <th class="col-lg-5 h4">cadeia</th>
+                                                <th class="col-lg-1 h4 text-center">Ação</th>
                                             </tr>
                                         </thead>
                                         <tbody>
