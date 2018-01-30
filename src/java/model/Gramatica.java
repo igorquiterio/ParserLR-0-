@@ -20,6 +20,7 @@ public class Gramatica {
     private HashSet<String> naoTerminais;
     private HashSet<String> alfabeto;
     private TabelaLR lr0;
+    private TabelaTrace tt;
     private int indEstados = 0;
 
     /*
@@ -32,6 +33,7 @@ public class Gramatica {
         this.naoTerminais = new HashSet();
         this.producoes = new LinkedList();
         this.alfabeto = new HashSet<>();
+        String primeiroNaoTerminal = "";
         
         for (int i = 0; i < linhas.length; i++) {
             if(linhas[i].compareTo("") != 1){
@@ -85,52 +87,6 @@ public class Gramatica {
         this.setLr0(new TabelaLR(this.naoTerminais, this.alfabeto, this.estados));
     }
     
-    public void reconhecerCadeia(String pCadeia){
-        LinkedList<String> pilha = new LinkedList();
-        LinkedList<String> cadeia;
-        int estado = 1;
-        
-        cadeia = this.prepararCadeiaReconhecimento(pCadeia);
-        pilha.add("i 1");
-        
-        for(String termo : cadeia){
-            int coluna = this.getLr0().achaTermoNoIndice("termo");
-            String acao = this.getLr0().getTabela()[estado][coluna];
-            String[] split = acao.split(" ");
-            if(split.length == 2){
-                if(split[0].compareTo("s") == 0){
-                    pilha.add(termo.concat(" ").concat(split[1]));
-                }
-                else if(split[0].compareTo("g") == 0){
-                    String ultimo = pilha.getLast();
-                    String[] ultSplit = ultimo.split(" ");
-                    pilha.removeLast();
-                    pilha.add(ultSplit[0].concat(" ").concat(split[1]));
-                }
-                else if(split[0].compareTo("r") == 0){
-                    System.out.println("Fazer o reduce");
-                }
-                else
-                    System.out.println("Não é nem reduce, nem shift, nem go to");
-            }
-            else
-                System.out.println("Deu merda");
-            
-            estado = Integer.parseInt(pilha.getLast().split(" ")[1]);
-        }
-    }
-    
-    private LinkedList<String> prepararCadeiaReconhecimento(String cadeia){
-        LinkedList<String> lista = new LinkedList();
-        
-        String[] split = cadeia.split(" ");
-        for(int i=0; i<split.length; i++){
-            lista.add(split[i]);
-        }
-        
-        return lista;
-    }
-    
     @SuppressWarnings("empty-statement")
     private void gerarPrimeiroEstado(Producao prod){
         String naoTerminalCorrente = prod.getNaoTerminal();
@@ -166,13 +122,21 @@ public class Gramatica {
     private LinkedList<Estado> gerarEstado(Estado est){
         LinkedList<Estado> novosEstados = new LinkedList();
         LinkedList<Mudanca> novasMudancas = new LinkedList();
-
+        
         for(Producao prod : est.getProducao()){
             Producao copia = prod.copiarProducao();
             copia.setPontoCorrente(prod.getPontoCorrente()+1);
             // Caso a produção não tenha mais nada para ler
             if(prod.getCadeia().size() == prod.getPontoCorrente()){
-                est.adicionarReduce(prod.getIndice());
+                int existe = 0;
+                for(int reduce : est.getReduce()){
+                    if(reduce == prod.getIndice()){
+                        existe = 1;
+                        break;
+                    }
+                }
+                if(existe == 0)
+                    est.adicionarReduce(prod.getIndice());
             }
             else{
                 String termo = prod.getCadeia().get(prod.getPontoCorrente());
@@ -188,7 +152,7 @@ public class Gramatica {
                             mud = teste;
                             existeMudanca = 1;
                             // mudanca futura já existente
-                            if(teste.getNaoTerminal().compareTo(prod.getNaoTerminal()) == 0){
+                            if(teste.getIndiceProducao() == prod.getIndice()){
                                 mud = null;
                                 existeMudanca = 2;
                                 break;
@@ -204,7 +168,7 @@ public class Gramatica {
                             for(Producao chave : teste.getChave()){
                                 if(chave.compararProducao(copia)){
                                     encontrouEstadoChave = 1;
-                                    mud = new Mudanca(teste.getIndice(), termo, copia.getNaoTerminal());
+                                    mud = new Mudanca(teste.getIndice(), termo, copia.getNaoTerminal(), copia.getIndice());
                                     novasMudancas.add(mud);
                                     break;
                                 }
@@ -213,19 +177,38 @@ public class Gramatica {
                         if(encontrouEstadoChave == 0){
                             Estado estadoNovo = criarEstado(copia);
                             novosEstados.add(estadoNovo);
-                            mud = new Mudanca(estadoNovo.getIndice(), termo, copia.getNaoTerminal());
+                            mud = new Mudanca(estadoNovo.getIndice(), termo, copia.getNaoTerminal(), copia.getIndice());
                             est.getMudancas().add(mud);
                             while(this.adicionarProducaoEstado(estadoNovo) == 1);
+                            
                         }
                     }
                     // fazer com que essa mudanca vá para o mesmo estado
                     else if(existeMudanca == 1){
                         int estadoSuspeito = mud.getEstadoDestino();
-                        Estado teste = this.estados.get(estadoSuspeito);
-                        mud = new Mudanca(estadoSuspeito, termo, copia.getNaoTerminal());
+                        Estado teste = null;
+                        if(this.estados.size() > estadoSuspeito)
+                            teste = this.estados.get(estadoSuspeito);
+                        if(teste == null){
+                            for(int k=0; k<novosEstados.size(); k++){
+                                if(novosEstados.get(k).getIndice() == estadoSuspeito){
+                                    teste = novosEstados.get(k);
+                                }
+                            }
+                        }
+                        mud = new Mudanca(estadoSuspeito, termo, copia.getNaoTerminal(), copia.getIndice());
                         est.getMudancas().add(mud);
-                        teste.getChave().add(copia);
-                        teste.getProducao().add(copia);
+                        int chv = 0;
+                        for(Producao chave : teste.getChave()){
+                            if(chave.getIndice() == copia.getIndice()){
+                                chv = 1;
+                                break;
+                            }
+                        }
+                        if(chv == 0){
+                            teste.getChave().add(copia);
+                            teste.getProducao().add(copia);   
+                        }
                         while(this.adicionarProducaoEstado(teste) == 1);
                     }
                 }
@@ -277,8 +260,17 @@ public class Gramatica {
                             Producao copia = nTerminalProd.copiarProducao();
                             copia.setPontoCorrente(0);
                             if(est.verificarProducaoEstado(copia) == 0){
-                                listaAdicionar.add(copia);
-                                o = 1;
+                                int existe = 0;
+                                for(Producao p : listaAdicionar){
+                                    if(p.compararProducao(copia)){
+                                        existe = 1;
+                                        break;
+                                    }
+                                }
+                                if(existe == 0){
+                                    listaAdicionar.add(copia);
+                                    o = 1;
+                                }
                             }
                         }
                     }

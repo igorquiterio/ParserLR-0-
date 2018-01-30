@@ -78,7 +78,7 @@ public class TabelaLR {
                     tabela[i][dollar] = tabela[i][dollar].concat("Acc");
                 }else{
                     for (int l = 0; l < tabela[i].length; l++) {
-                        tabela[i][l] = tabela[i][l].concat("r "+ prodRed);
+                        tabela[i][l] = tabela[i][l].concat("r "+ prodRed + " ");
                     }
                 }
             }                      

@@ -13,11 +13,13 @@ public class Mudanca {
     private int estadoDestino;
     private String termo;
     private String naoTerminal;
+    private int indiceProducao;
     
-    public Mudanca (int pEstadoDestino, String pTermo, String pNaoTerminal){
+    public Mudanca (int pEstadoDestino, String pTermo, String pNaoTerminal, int pIndiceProducao){
         this.estadoDestino = pEstadoDestino;
         this.termo = pTermo;
         this.naoTerminal = pNaoTerminal;
+        this.indiceProducao = pIndiceProducao;
     }
     
     
@@ -25,9 +27,9 @@ public class Mudanca {
     Compara duas Mundanças e caso sejam iguais retorna true
     */
     public boolean compararMudancas(Mudanca mud){
-        if(mud.getEstadoDestino() == this.estadoDestino){
-            if(mud.getNaoTerminal().compareTo(this.naoTerminal) == 0){
-                if(mud.getTermo().compareTo(this.termo) == 0){
+        if(mud.getEstadoDestino() == this.getEstadoDestino()){
+            if(mud.getNaoTerminal().compareTo(this.getNaoTerminal()) == 0){
+                if(mud.getTermo().compareTo(this.getTermo()) == 0){
                     return true;
                 }
             }
@@ -36,7 +38,7 @@ public class Mudanca {
     }
     
     public void mostrarMudanca(){
-        System.out.println(this.naoTerminal + " " + this.termo + " " + this.estadoDestino);
+        System.out.println(this.getNaoTerminal() + " " + this.getTermo() + " " + this.getEstadoDestino());
     }
 
     /**
@@ -79,6 +81,20 @@ public class Mudanca {
      */
     public void setNaoTerminal(String naoTerminal) {
         this.naoTerminal = naoTerminal;
+    }
+
+    /**
+     * @return the indiceProducao
+     */
+    public int getIndiceProducao() {
+        return indiceProducao;
+    }
+
+    /**
+     * @param indiceProducao the indiceProducao to set
+     */
+    public void setIndiceProducao(int indiceProducao) {
+        this.indiceProducao = indiceProducao;
     }
     
     
