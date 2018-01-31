@@ -26,7 +26,14 @@
                     <button class="btn btn-lg btn-primary" type="submit">Submeter</button>
                 </div>
             </form>
-        </div>
+        </div>  
+                <div class="text-center">
+                <h3 class="form-signin-heading">Authors</h3>
+                <h3 class="form-signin-heading">Gustavo Mariotto de Oliveira</h3>
+                <h3 class="form-signin-heading">Igor da Costa Quitério</h3>
+                Get the 
+                 <a href="https://github.com/igorquiterio/ParserLR-0-">Source Code</a> here, feel free to share :)
+                </div>
         <script src="${pageContext.servletContext.contextPath}/assets/vendor/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.servletContext.contextPath}/assets/vendor/js/bootstrap.min.js"></script>
         <script src="${pageContext.servletContext.contextPath}/assets/vendor/js/multiline-placeholder.js"></script>
