@@ -15,7 +15,7 @@
     <body>
 
         <div class="container">
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th class="h4 text-center">  </th>
@@ -23,9 +23,9 @@
 
                     </tr>
                     <tr>
-                        <th class="col-lg-4 h4"></th>
-                        <th class="col-lg-1 h4"></th>
-                        <th class="col-lg-7 h4"></th>
+                        <th class="col-lg-3 h4"></th>
+                        <th class="col-lg-3 h4"></th>
+                        <th class="col-lg-5 h4"></th>
 
                     </tr>
                 </thead>
@@ -72,9 +72,89 @@
                         <td>
                         </td>
                         <td>
+                            <!--aqui-->
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            
+                            <c:choose>
+                                <c:when test="${gram.lr0.aceita == 1}">
+
+                                    <div class="center-block">                    
+                                        <form class="form-inline" action="${pageContext.servletContext.contextPath}/gramatica/trace" method="POST">                        
+
+                                            <div class="input-group mb-4 mr-sm-4 mb-sm-0">
+                                                <input class="form-control" type="text" name="cadeia" placeholder="cadeia $" required autofocus>
+
+                                            </div>
+                                            <button class="btn btn-primary" type="submit">Submeter</button>
+                                            <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/">Voltar</a>
+                                        </form>                        
+                                    </div>
+                                </c:when>    
+                                <c:otherwise>
+                                    <div class="text-center">
+                                        <h2 class="text-center"> A GRAMATICA NÃO É LR0</h2>
+
+                                        <br>
+                                        <br>
+                                        <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/">Voltar</a>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                    
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-lg-3 h4"></th>
+                        <th class="col-lg-9 h4"></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
                             <table class="table table-striped table-bordered">
                                 <thead>
-                                    <tr><h3>Tabela LR0</h3></tr>
+                                    <tr>
+                                        <th class="col-lg-6 h4"colspan="2" >Reduce</th>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="col-lg-1 h4">Indice</th>
+                                        <th class="col-lg-5 h4 text-center">Produção</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="prod" items="${gram.producoes}">
+                                        <tr>
+                                            <th><span class="h4">${prod.indice}</span></th>
+                                            <th><span class="h4">${prod.naoTerminal} -> 
+                                                    <c:forEach var="cad" items="${prod.cadeia}">
+                                                        ${cad}
+                                                    </c:forEach>
+                                                </span></th>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </th>
+                        <th>
+                            <!--aqui-->
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    
                     <tr  class="table-dark">
                         <th class="col-lg-1 h4 text-center">Estado</th>
                         <th class="col-lg-6 h4 text-center" colspan="${gram.lr0.maxColuna}">Ação</th>
@@ -103,38 +183,12 @@
                                     </c:forEach>
                                     </tbody>
                                     </table>
-                                    </td>
-
+                                    </th>
                                     </tr>
-
-
                                     </tbody>
                                     </table>
-                                    <c:choose>
-                                        <c:when test="${gram.lr0.aceita == 1}">
-                                            
-                                            <div class="center-block">                    
-                                                <form class="form-inline" action="${pageContext.servletContext.contextPath}/gramatica/trace" method="POST">                        
-                                                        
-                                                    <div class="input-group mb-4 mr-sm-4 mb-sm-0">
-                                                        <input class="form-control" type="text" name="cadeia" placeholder="cadeia $" required autofocus>
 
-                                                    </div>
-                                                    <button class="btn btn-primary" type="submit">Submeter</button>
-                                                    <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/">Voltar</a>
-                                                </form>                        
-                                            </div>
-                                        </c:when>    
-                                        <c:otherwise>
-                                            <div class="text-center">
-                                                <h2 class="text-center"> A GRAMATICA NÃO É LR0</h2>
-                                                
-                                                <br>
-                                                <br>
-                                                <a class="btn btn-default" href="${pageContext.servletContext.contextPath}/">Voltar</a>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
+
 
 
 
